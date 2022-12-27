@@ -1,0 +1,7 @@
+name: meins_core
+version: 1.1.1
+main: de.ender.core.Main
+api-version: 1.19
+load: STARTUP
+authors: [ ender__exe ]
+description: Core of Meins
