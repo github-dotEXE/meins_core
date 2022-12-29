@@ -12,7 +12,7 @@ public final class Main extends JavaPlugin {
         new MCore().log(ChatColor.GREEN + "Enabling Meins Core");
         new MCore().log();
         plugin = this;
-        new UpdateChecker().check("1.0", "github-dotEXE", "meins_core");
+        new UpdateChecker().check("1.1", "github-dotEXE", "meins_core");
     }
 
     @Override

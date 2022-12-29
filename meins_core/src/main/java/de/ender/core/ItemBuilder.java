@@ -33,20 +33,21 @@ public class ItemBuilder {
 
     @Deprecated
     public ItemBuilder addLore(int index, String lore) {
+        itemMeta.getLore().add(lore);
+        return this;
+    }
+    @Deprecated
+    public ItemBuilder setLoreAt(int index, String lore) {
         itemMeta.getLore().add(index,lore);
         return this;
     }
 
-    public ItemBuilder addEnchantment(Enchantment enchantment, int value) {
-        item.addUnsafeEnchantment(enchantment, value);
+    public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
+        item.addUnsafeEnchantment(enchantment, level);
         return this;
     }
-
-    public ItemBuilder addEnchantment(Enchantment enchantment, int value, boolean loreify) {
-        item.addUnsafeEnchantment(enchantment, value);
-        if (loreify) {
-            this.addLore(0, ChatColor.AQUA + enchantment.getName() + " " + value);
-        }
+    public ItemBuilder addMaxEnchantment(Enchantment enchantment) {
+        item.addEnchantment(enchantment, enchantment.getMaxLevel());
         return this;
     }
 
