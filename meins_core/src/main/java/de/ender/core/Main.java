@@ -5,18 +5,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
 
+    public static Main plugin;
+
     @Override
     public void onEnable() {
-        //Branding
         new MCore().log(ChatColor.GREEN + "Enabling Meins Core");
         new MCore().log();
-        //new CConfig("name", this).getCustomConfig();
+        plugin = this;
+        new UpdateChecker().check("1.0", "github-dotEXE", "meins_core");
     }
 
     @Override
     public void onDisable() {
-        //Branding
         new MCore().log(ChatColor.GREEN + "Disabling Meins Core");
         new MCore().log();
+    }
+    public static Main getPlugin() {
+        return plugin;
     }
 }
