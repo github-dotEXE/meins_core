@@ -11,11 +11,8 @@ import java.util.*;
 
 public class TabCompleteManager implements TabCompleter {
 
-    private final HashMap<Integer,String[]> argsComps = new HashMap<Integer,String[]>();
+    private final HashMap<Integer,String[]> argsComps = new HashMap<>();
 
-    public TabCompleteManager() {
-
-    }
     public TabCompleteManager addArgsXComps(int argsX, String[] completes ){
         argsComps.put(argsX+1,completes);
         return this;
@@ -32,7 +29,7 @@ public class TabCompleteManager implements TabCompleter {
             if(args.length == i) {
                 String[] argsi = argsComps.get(i);
                 if(argsi != null) {
-                    Collections.addAll(completions, argsi);
+                    Collections.addAll(commands, argsi);
                 }
             }
         }

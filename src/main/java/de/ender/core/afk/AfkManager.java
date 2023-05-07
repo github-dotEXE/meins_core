@@ -1,6 +1,5 @@
 package de.ender.core.afk;
 
-import de.ender.core.Log;
 import de.ender.core.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -22,11 +21,12 @@ public class AfkManager implements Listener {
 
     public static void playerJoin(Player player){
         lastMovement.put(player,System.currentTimeMillis());
-        currentTask.put(player,timeAFK(player,lastMovement.get(player),player.getLocation()));
+        currentTask.put(player,timeAFK(player,lastMovement.get(player)));
     }
 
     public static void playerLeave(Player player){
         lastMovement.remove(player);
+        stopCurrentTask(player);
     }
 
     public static void playerMove(Player player){
@@ -41,7 +41,7 @@ public class AfkManager implements Listener {
         }
     }
 
-    private static BukkitTask timeAFK(Player player, long oldLastMovement, Location oldLoc){
+    private static BukkitTask timeAFK(Player player, long oldLastMovement){
         return new BukkitRunnable() {
             @Override
             public void run() {
@@ -80,16 +80,22 @@ public class AfkManager implements Listener {
         Bukkit.getPluginManager().callEvent(event);
     }
 
-    @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        Player player = event.getPlayer();
-        playerMove(player);
+    private static boolean stopCurrentTask(Player player){
         BukkitTask task = currentTask.get(player);
         if(task != null){
             task.cancel();
             currentTask.put(player,null);
+            return true;
         }
-        currentTask.put(player,timeAFK(player,lastMovement.get(player),player.getLocation()));
+        return false;
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        playerMove(player);
+        stopCurrentTask(player);
+        currentTask.put(player,timeAFK(player,lastMovement.get(player)));
     }
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {

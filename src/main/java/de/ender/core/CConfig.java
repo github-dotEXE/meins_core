@@ -11,13 +11,13 @@ import java.io.IOException;
 public class CConfig{
 
     private File customConfigFile;
-    private final String Fname;
-    private final JavaPlugin Fmain;
+    private final String name;
+    private final JavaPlugin plugin;
     private FileConfiguration customConfig;
 
-    public CConfig(String name, JavaPlugin main){
-        Fname = name;
-        Fmain = main;
+    public CConfig(String name, JavaPlugin plugin){
+        this.name = name;
+        this.plugin = plugin;
         createCustomConfig();
     }
 
@@ -26,10 +26,10 @@ public class CConfig{
     }
 
     private void createCustomConfig() {
-        customConfigFile = new File(Fmain.getDataFolder(), Fname+".yml");
+        customConfigFile = new File(plugin.getDataFolder(), name +".yml");
         if (!customConfigFile.exists()) {
             customConfigFile.getParentFile().mkdirs();
-            Fmain.saveResource(Fname+".yml", false);
+            plugin.saveResource(name +".yml", false);
         }
 
         customConfig = new YamlConfiguration();
