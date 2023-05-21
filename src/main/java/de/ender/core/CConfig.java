@@ -11,14 +11,18 @@ import java.io.IOException;
 public class CConfig{
 
     private File customConfigFile;
-    private final String name;
+    private String fileName;
     private final JavaPlugin plugin;
     private FileConfiguration customConfig;
 
     public CConfig(String name, JavaPlugin plugin){
-        this.name = name;
         this.plugin = plugin;
+        setFileName(name);
         createCustomConfig();
+    }
+    private void setFileName(String name){
+        if(!name.contains(".yml")) this.fileName = name +".yml";
+        else this.fileName = name;
     }
 
     public FileConfiguration getCustomConfig() {
@@ -26,10 +30,10 @@ public class CConfig{
     }
 
     private void createCustomConfig() {
-        customConfigFile = new File(plugin.getDataFolder(), name +".yml");
+        customConfigFile = new File(plugin.getDataFolder(), fileName);
         if (!customConfigFile.exists()) {
             customConfigFile.getParentFile().mkdirs();
-            plugin.saveResource(name +".yml", false);
+            plugin.saveResource(fileName, false);
         }
 
         customConfig = new YamlConfiguration();

@@ -9,14 +9,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class AfkStopEvent extends Event implements Cancellable {
     private boolean isCancelled;
-    private static final HandlerList HANDLERS = new HandlerList();
+    private static final HandlerList HANDLER_LIST = new HandlerList();
     private final Player player;
 
     public static HandlerList getHandlerList() {
-        return HANDLERS;
+        return HANDLER_LIST;
     }
 
     public AfkStopEvent(Player player){
+        super();
         this.isCancelled = false;
         this.player = player;
         Log.info(this.player.getName()+" is no longer AFK!");
@@ -34,7 +35,7 @@ public class AfkStopEvent extends Event implements Cancellable {
 
     @Override
     public @NotNull HandlerList getHandlers() {
-        return HANDLERS;
+        return HANDLER_LIST;
     }
 
 

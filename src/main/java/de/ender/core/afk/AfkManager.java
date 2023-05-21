@@ -2,7 +2,6 @@ package de.ender.core.afk;
 
 import de.ender.core.Main;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,6 +21,7 @@ public class AfkManager implements Listener {
     public static void playerJoin(Player player){
         lastMovement.put(player,System.currentTimeMillis());
         currentTask.put(player,timeAFK(player,lastMovement.get(player)));
+        callAFKJoin(player);
     }
 
     public static void playerLeave(Player player){
@@ -73,11 +73,15 @@ public class AfkManager implements Listener {
 
     private static void callStart(Player player){
         AfkStartEvent event = new AfkStartEvent(player);
-        Bukkit.getPluginManager().callEvent(event);
+        Bukkit.getServer().getPluginManager().callEvent(event);
     }
     private static void callStop(Player player){
         AfkStopEvent event = new AfkStopEvent(player);
-        Bukkit.getPluginManager().callEvent(event);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+    private static void callAFKJoin(Player player) {
+        AfkJoinEvent event = new AfkJoinEvent(player);
+        Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
     private static boolean stopCurrentTask(Player player){
@@ -85,9 +89,8 @@ public class AfkManager implements Listener {
         if(task != null){
             task.cancel();
             currentTask.put(player,null);
-            return true;
         }
-        return false;
+        return task != null;
     }
 
     @EventHandler

@@ -19,7 +19,7 @@ public final class Main extends JavaPlugin {
         plugin = this;
         UpdateChecker.check(getDescription().getVersion(), "github-dotEXE", "meins_core", "main");
 
-        PluginManager pluginManager = Bukkit.getPluginManager();
+        PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new AfkManager(), this);
         pluginManager.registerEvents(new PluginMessageManager(), this);
 
