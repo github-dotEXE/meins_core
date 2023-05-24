@@ -1,4 +1,4 @@
-package de.ender.core.cenchants;
+package de.ender.core.modifiers;
 
 import org.bukkit.entity.Player;
 

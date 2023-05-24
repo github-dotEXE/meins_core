@@ -1,4 +1,4 @@
-package de.ender.core.cenchants;
+package de.ender.core.modifiers;
 
 public enum ItemType {
     ALL,ALL_TOOLS,ALL_ARMOR,SWORD,SHOVEL,PICKAXE,AXE,HOE,BOOTS,LEGGINGS,CHESTPLATE,HELMET,SHEARS
