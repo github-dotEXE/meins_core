@@ -15,4 +15,10 @@ public class Colorer {
     public static String list(String[] lst){
         return list(lst,"&");
     }
+    public static String removeString(String str){
+        while (str.contains("§")){
+            str = str.substring(str.indexOf("§")+2);
+        }
+        return str;
+    }
 }

@@ -6,7 +6,7 @@
 
     <groupId>de.ender</groupId>
     <artifactId>core</artifactId>
-    <version>1.19</version>
+    <version>1.20</version>
     <packaging>jar</packaging>
 
     <name>meins_core</name>
@@ -37,6 +37,13 @@
         </resources>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>de.ender-releases</id>
+            <url>http://exe.ddns.net:8081/releases</url>
+        </repository>
+    </distributionManagement>
+
     <repositories>
         <repository>
             <id>papermc-repo</id>
@@ -52,7 +59,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

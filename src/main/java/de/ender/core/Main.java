@@ -2,6 +2,7 @@ package de.ender.core;
 
 import de.ender.core.afk.AfkCMD;
 import de.ender.core.afk.AfkManager;
+import de.ender.core.modifiers.ModifierManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -22,6 +23,7 @@ public final class Main extends JavaPlugin {
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new AfkManager(), this);
         pluginManager.registerEvents(new PluginMessageManager(), this);
+        pluginManager.registerEvents(new ModifierManager(), this);
 
         getCommand("afk").setExecutor(new AfkCMD());
 
