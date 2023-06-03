@@ -1,111 +1,96 @@
 package de.ender.core;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.ChatPaginator;
+import org.bukkit.util.FileUtil;
+import org.codehaus.plexus.util.FileUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.Scanner;
 
-/**
- * checks for updates and sends info in console
- */
 public class UpdateChecker {
 
-    private static boolean upToDate = false;
-    private static String latest = "";
+    private boolean upToDate;
+    private String latest;
+    private final String version;
+    private final String githubProfileName;
+    private final String repoName;
+    private final String branchName;
 
-    /**
-     * gets repo name from plugin.yml name
-     *
-     * @param github_profile_name the name of the GitHub profile
-     * @param  plugin  the Main class (this if you are in Main)
-     * @param  branch_name the GitHub branch in which to look for the files
-     * @param  version the version of this plugin
-     * @see UpdateChecker
-     */
-    public static void check(Plugin plugin,String branch_name, String version,String github_profile_name) {
-        PluginDescriptionFile description = plugin.getDescription();
+    public UpdateChecker(JavaPlugin plugin,String github_profile_name, String repo_name, String branch_name){
+        this.upToDate = false;
+        this.githubProfileName = github_profile_name;
+        this.repoName = repo_name;
+        this.branchName = branch_name;
 
-        String repo_name = description.getName();
+        this.version = plugin.getPluginMeta().getVersion();
+        getLatest();
+    }
+    public UpdateChecker(JavaPlugin meins_plugin,String branchName){
+        this.githubProfileName = "github-dotEXE";
+        this.branchName = branchName;
+        this.upToDate = false;
+        this.repoName = meins_plugin.getPluginMeta().getName();
 
-        check(version,github_profile_name,repo_name,branch_name);
+        this.version = meins_plugin.getPluginMeta().getVersion();
+        getLatest();
     }
 
     /**
-     * gets repo name from plugin.yml name
-     * gets GitHub profile name from first author description
-     *
-     * @param  plugin  the Main class (this if you are in Main)
-     * @param  branch_name the GitHub branch in which to look for the files
-     * @param  version the version of this plugin
-     * @see UpdateChecker
+     * format codes:
+     *      '${version}'
+     *      '${name}'
      */
-    public static void check(Plugin plugin,String branch_name, String version) {
-        PluginDescriptionFile description = plugin.getDescription();
+    public UpdateChecker downloadLatest(final String formattableURL,final String name){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                String formattedURL = formattableURL.replace("${version}",latest).replace("${name}",name);
+                String fileName = formattedURL.split("/")[formattedURL.split("/").length-1];
 
-        String repo_name = description.getName();
-        String github_profile_name = description.getAuthors().get(0);
+                File oldfile = new File(Main.getPlugin().getDataFolder().getParentFile(),fileName.replace(latest,version));
+                File newfile = new File(Main.getPlugin().getDataFolder().getParentFile(),fileName);
+                try {
+                    if (Float.parseFloat(version) >= Float.parseFloat(latest)) {
+                        Log.log("Repo "+repoName+" isn't up to date!");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    Log.log("Couldn't insure that repo isn't up to date!");
+                }
 
-        check(version,github_profile_name,repo_name,branch_name);
+                try {
+                    URL website = new URL(formattedURL);
+                    ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+                    FileOutputStream fos = new FileOutputStream(newfile);
+                    fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+                    Log.log(ChatColor.GREEN+"Successfully downloaded latest file form: "+ChatColor.WHITE + formattedURL);
+                    oldfile.delete();
+                } catch (IOException e) {
+                    Log.log(ChatColor.RED + "Unable to download latest file from: "+ChatColor.WHITE + formattedURL);
+                }
+            }
+        }.runTaskAsynchronously(Main.getPlugin());
+        return this;
     }
-    /**
-     * gets repo name from plugin.yml name
-     * gets GitHub profile name from plugin.yml authors (the first)
-     * gets version from plugin.yml
-     *
-     * @param  plugin  the Main class (this if you are in Main)
-     * @param  branch_name the GitHub branch in which to look for the files
-     * @see UpdateChecker
-     */
-    public static void check(Plugin plugin,String branch_name) {
-        PluginDescriptionFile description = plugin.getDescription();
-
-        String repo_name = description.getName();
-        String version = description.getVersion();
-        String github_profile_name = description.getAuthors().get(0);
-        check(version,github_profile_name,repo_name,branch_name);
-    }
-
-    /**
-     * always uses "master" branch
-     *
-     * @param  version the version of this plugin
-     * @param github_profile_name the profile name on GitHub
-     * @param repo_name the repository name on GitHub
-     * @see UpdateChecker
-     */
-    @Deprecated
-    public static void check(String version, String github_profile_name, String repo_name) {
-        check(version,github_profile_name,repo_name,"master");
+    public UpdateChecker downloadLatestMeins(){
+        return downloadLatest("http://exe.ddns.net:8081/releases/de/ender/${name}/${version}/${name}-${version}.jar",repoName.substring(6));
     }
 
-    /**
-     *
-     * @param branch_name the name of the branch on GitHub
-     * @param  version the version of this plugin
-     * @param github_profile_name the profile name on GitHub
-     * @param repo_name the repository name on GitHub
-     * @see UpdateChecker
-     */
-    public static void check(String version, String github_profile_name, String repo_name, String branch_name) {
-        Log.log(ChatColor.GRAY + "Checking for Plugin updates for "+repo_name+"...");
-        InputStream vStream = null;
-        InputStream pomStream = null;
+    private void getLatest() {
+        Log.log(ChatColor.GRAY + "Checking for Plugin updates for "+repoName+"...");
+        String url ="https://raw.githubusercontent.com/"+githubProfileName+"/"+repoName+"/"+branchName+"/pom.xml";
         try {
-            pomStream = new URL("https://raw.githubusercontent.com/"+github_profile_name+"/"+repo_name+"/"+branch_name+"/pom.xml").openStream();
-        } catch (IOException e) {
-            Log.log(ChatColor.YELLOW + "No pom.xml found in "+ "https://raw.githubusercontent.com/"+github_profile_name+"/"+repo_name+"/"+branch_name+"/");
-        }
-        try {
-            vStream = new URL("https://raw.githubusercontent.com/"+github_profile_name+"/"+repo_name+"/"+branch_name+"/version.txt").openStream();
-        } catch (IOException e) {
-            Log.log(ChatColor.YELLOW + "No version.txt found in "+ "https://raw.githubusercontent.com/"+github_profile_name+"/"+repo_name+"/"+branch_name+"/");
-        }
-
-        if(pomStream!=null){
+            InputStream pomStream = new URL(url).openStream();
             Scanner scanner = new Scanner(pomStream);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
@@ -115,28 +100,28 @@ public class UpdateChecker {
                 }
             }
             scanner.close();
-        } else if (vStream != null ) {
-            Scanner scanner = new Scanner(vStream);
-            latest = scanner.next();
-            scanner.close();
-        } else Log.log(ChatColor.RED + "Unable to check for updates for repo " + repo_name);
-        checkUTD(latest,version,repo_name);
+        } catch (IOException e) {
+            Log.log(ChatColor.YELLOW + "No pom.xml found in "+url);
+            Log.log(ChatColor.RED + "Unable to check for updates for repo " + repoName);
+        }
     }
 
-    public static boolean upToDate() {
+    public boolean isUpToDate() {
         return upToDate;
     }
 
-    public static String getLatestVersion() {
+    public String getLatestVersion() {
         return latest;
     }
 
-    private static void checkUTD(String latest,String version, String repo_name) {
+    public UpdateChecker check() {
         upToDate = version.equals(latest);
-        if (upToDate) {
-            Log.log(ChatColor.GREEN + "Plugin "+ repo_name +" is up to date! "+ChatColor.GRAY+"Version: "+ latest);
-        } else {
-            Log.log(ChatColor.GOLD + repo_name +" is out of date! Please update. You are still on Version "+ version +", newest is "+latest+"!");
+        if(!upToDate) {
+            upToDate = version.equals(latest + "0");
+            if(upToDate) latest += "0";
         }
+        if (upToDate) Log.log(ChatColor.GREEN + "Plugin " + repoName + " is up to date! " + ChatColor.GRAY + "Version: " + latest);
+        else Log.log(ChatColor.GOLD + repoName + " is out of date! Please update. You are still on Version " + version + ", newest is " + latest + "!");
+        return this;
     }
 }

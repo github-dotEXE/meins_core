@@ -7,14 +7,12 @@ good api/lib plugin (aswell as being needed for many of my plugins)
   Checks updates for plugins on github
   
   Prequisits:
-    version.txt in github repo (same place as readme.md)
-    version.txt should have just 1 line with version 
-    format (eg.: "1.0","v1.1","v1.2-beta") doesn't matter thou has to be the same in [STRING_version_of_this_plugin]
-    OR
-    it uses pom.xml (if pom.xml is in same place as readme.md)
+    pom.xml in same place as readme.md (on GitHub)
   
   How to use it:
-    UpdateChecker.check("[STRING_version_of_this_plugin]", "[STRING_github_profile]", "[STRING_repo_name]", "[STRING_branch_name]");
+    UpdateChecker updateChecker = new UpdateChecker(JavaPlugin plugin,String github_profile_name, String repo_name, String branch_name);
+    updateChecker.check() //will check for updates and send info in Console
+    updateChecker.downloadLatest(String formattedURL,String name) //will auto-download jar from URL
 </pre>
 
 ### Log

@@ -1,4 +1,4 @@
-package de.ender.core;
+package de.ender.core.guiManagers;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -27,8 +27,9 @@ public class CGUI {
     public Inventory getGui(){
         return gui;
     }
-    public void setGuiSpace(int index, ItemStack item){
+    public CGUI setGuiSpace(int index, ItemStack item){
         gui.setItem(index,item);
+        return this;
     }
     /**
      * x ∈ N₀<p>
@@ -41,26 +42,30 @@ public class CGUI {
      * v<p>
      * y
      */
-    public void setGuiSpace(int x,int y,ItemStack item){
+    public CGUI setGuiSpace(int x,int y,ItemStack item){
         int index = y*9+x;
         setGuiSpace(index,item);
+        return this;
     }
-    public void fillEmpty(ItemStack item){
-        for(int i = 0; i<=getSize(); i++){
+    public CGUI fillEmpty(ItemStack item){
+        for(int i = 0; i<=getSize()-1; i++){
             if(gui.getItem(i) == null){
                 gui.setItem(i,item);
             }
         }
+        return this;
     }
-    public void clear(){
+    public CGUI clear(){
         for(ItemStack item : gui){
             gui.remove(item);
         }
+        return this;
     }
-    public void fillAll(ItemStack item){
+    public CGUI fillAll(ItemStack item){
         for(int i = 0; i<=getSize(); i++){
             gui.setItem(i,item);
         }
+        return this;
     }
     public @Nullable ItemStack getGuiSpace(int index){
         return gui.getItem(index);

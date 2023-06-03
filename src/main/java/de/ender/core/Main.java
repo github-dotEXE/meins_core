@@ -1,7 +1,10 @@
 package de.ender.core;
 
+import com.google.common.collect.Iterables;
 import de.ender.core.afk.AfkCMD;
 import de.ender.core.afk.AfkManager;
+import de.ender.core.guiManagers.GuiListener;
+import de.ender.core.guiManagers.TextGUI;
 import de.ender.core.modifiers.ModifierManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,15 +18,16 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Log.success("Enabling Meins Core...");
+        Log.log("Enabling Meins Core...");
         Log.printLogo();
         plugin = this;
-        UpdateChecker.check(getDescription().getVersion(), "github-dotEXE", "meins_core", "main");
+        new UpdateChecker(this,"main").check().downloadLatestMeins();
 
         PluginManager pluginManager = getServer().getPluginManager();
         pluginManager.registerEvents(new AfkManager(), this);
         pluginManager.registerEvents(new PluginMessageManager(), this);
         pluginManager.registerEvents(new ModifierManager(), this);
+        pluginManager.registerEvents(new GuiListener(), this);
 
         getCommand("afk").setExecutor(new AfkCMD());
 
@@ -42,7 +46,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Log.success("Disabling Meins Core");
+        Log.log("Disabling Meins Core");
         Log.printLogo();
         this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
