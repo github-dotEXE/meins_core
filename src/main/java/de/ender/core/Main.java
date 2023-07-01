@@ -16,7 +16,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Log.log("Enabling Meins Core...");
+        Log.enable(this);
         Log.printLogo();
         plugin = this;
         new UpdateChecker(this,"main").check().downloadLatestMeins();
@@ -44,7 +44,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        Log.log("Disabling Meins Core");
+        Log.disable(this);
         Log.printLogo();
         this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this);

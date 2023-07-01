@@ -30,4 +30,7 @@ public class Log {
     public static void enable(JavaPlugin plugin){
         info("Enabling "+plugin.getName()+"...");
     }
+    public static void disable(JavaPlugin plugin){
+        info("Disabling "+plugin.getName()+"...");
+    }
 }
