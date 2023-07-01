@@ -1,10 +1,8 @@
 package de.ender.core;
 
-import com.google.common.collect.Iterables;
 import de.ender.core.afk.AfkCMD;
 import de.ender.core.afk.AfkManager;
 import de.ender.core.guiManagers.GuiListener;
-import de.ender.core.guiManagers.TextGUI;
 import de.ender.core.modifiers.ModifierManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

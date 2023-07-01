@@ -40,7 +40,7 @@
     <distributionManagement>
         <repository>
             <id>de.ender-releases</id>
-            <url>http://exe.ddns.net:8081/releases</url>
+            <url>http://repo.etwas--anders.de:8081/releases</url>
         </repository>
     </distributionManagement>
 

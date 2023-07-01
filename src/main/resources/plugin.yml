@@ -1,5 +1,5 @@
 name: meins_core
-version: ${version}
+version: '${project.version}'
 main: de.ender.core.Main
 api-version: 1.19
 load: STARTUP

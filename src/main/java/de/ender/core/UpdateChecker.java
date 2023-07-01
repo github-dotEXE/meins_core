@@ -1,12 +1,8 @@
 package de.ender.core;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.ChatPaginator;
-import org.bukkit.util.FileUtil;
-import org.codehaus.plexus.util.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,6 +11,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.Scanner;
 
 public class UpdateChecker {
@@ -60,10 +58,10 @@ public class UpdateChecker {
                 File oldfile = new File(Main.getPlugin().getDataFolder().getParentFile(),fileName.replace(latest,version));
                 File newfile = new File(Main.getPlugin().getDataFolder().getParentFile(),fileName);
                 try {
-                    if (Float.parseFloat(version) >= Float.parseFloat(latest)) {
-                        Log.log("Repo "+repoName+" isn't up to date!");
+                    if (Float.parseFloat(version) > Float.parseFloat(latest)) {
+                        Log.log(ChatColor.GOLD+"Repo "+repoName+" isn't up to date!");
                         return;
-                    }
+                    } else if(Float.parseFloat(version) == Float.parseFloat(latest)) return;
                 } catch (NumberFormatException e) {
                     Log.log("Couldn't insure that repo isn't up to date!");
                 }
@@ -73,8 +71,12 @@ public class UpdateChecker {
                     ReadableByteChannel rbc = Channels.newChannel(website.openStream());
                     FileOutputStream fos = new FileOutputStream(newfile);
                     fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-                    Log.log(ChatColor.GREEN+"Successfully downloaded latest file form: "+ChatColor.WHITE + formattedURL);
-                    oldfile.delete();
+                    Log.log(ChatColor.GREEN+"Successfully downloaded latest file from: "+ChatColor.WHITE + formattedURL);
+                    try{
+                        Files.delete(oldfile.toPath());
+                    }catch (NoSuchFileException exception){
+                        Log.log(ChatColor.RED + "Unable to delete old jar of: "+ChatColor.WHITE + name);
+                    }
                 } catch (IOException e) {
                     Log.log(ChatColor.RED + "Unable to download latest file from: "+ChatColor.WHITE + formattedURL);
                 }
@@ -83,7 +85,7 @@ public class UpdateChecker {
         return this;
     }
     public UpdateChecker downloadLatestMeins(){
-        return downloadLatest("http://exe.ddns.net:8081/releases/de/ender/${name}/${version}/${name}-${version}.jar",repoName.substring(6));
+        return downloadLatest("http://repo.etwas--anders.de:8081/releases/de/ender/${name}/${version}/${name}-${version}.jar",repoName.substring(6));
     }
 
     private void getLatest() {

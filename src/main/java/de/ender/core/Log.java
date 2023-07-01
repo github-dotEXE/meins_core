@@ -1,6 +1,7 @@
 package de.ender.core;
 
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import static org.bukkit.Bukkit.getServer;
 
@@ -25,5 +26,8 @@ public class Log {
     }
     public static void log(String message){
         getServer().getConsoleSender().sendRawMessage(message);
+    }
+    public static void enable(JavaPlugin plugin){
+        info("Enabling "+plugin.getName()+"...");
     }
 }
