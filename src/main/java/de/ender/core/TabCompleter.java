@@ -2,40 +2,33 @@ package de.ender.core;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-@Deprecated
-public class TabCompleteManager implements TabCompleter {
+public class TabCompleter implements org.bukkit.command.TabCompleter {
+    private final HashMap<Integer,List<String>> checksI = new HashMap<>();
+    private final HashMap<String,List<String>> checksX = new HashMap<>();
 
-    private final HashMap<Integer,String[]> argsComps = new HashMap<>();
-
-    public TabCompleteManager addArgsXComps(int argsX, String[] completes ){
-        argsComps.put(argsX+1,completes);
-        return this;
+    public void addCompI(int i,String... comps){
+        checksI.put(i,Arrays.asList(comps));
     }
-
-    //add permissions later//
+    public void addCompX(String x,String... comps){
+        checksX.put(x,Arrays.asList(comps));
+    }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
         List<String> commands = new ArrayList<>();
 
-        for(int i=0;i<=argsComps.size();i++) {
-            if(args.length == i) {
-                String[] argsi = argsComps.get(i);
-                if(argsi != null) {
-                    Collections.addAll(commands, argsi);
-                }
-            }
-        }
+        commands.addAll(checksI.get(args.length));
+        commands.addAll(checksX.get(args[args.length-1]));
 
         StringUtil.copyPartialMatches(args[args.length-1], commands, completions); //copy matches of first argument
+
         Collections.sort(completions);//sort the list
         return completions;
     }

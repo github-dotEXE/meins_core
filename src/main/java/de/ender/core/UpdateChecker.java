@@ -84,8 +84,14 @@ public class UpdateChecker {
         }.runTaskAsynchronously(Main.getPlugin());
         return this;
     }
+    public UpdateChecker downloadLatestMeins(String name){
+        return downloadLatest("http://repo.etwas--anders.de:8080/releases/de/ender/${name}/${version}/${name}-${version}.jar",name);
+    }
     public UpdateChecker downloadLatestMeins(){
-        return downloadLatest("http://repo.etwas--anders.de:8080/releases/de/ender/${name}/${version}/${name}-${version}.jar",repoName.substring(6));
+        String name;
+        if(repoName.contains("meins_")) name = repoName.substring(6);
+        else name = repoName;
+        return downloadLatestMeins(name);
     }
 
     private void getLatest() {
