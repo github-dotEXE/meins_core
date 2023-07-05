@@ -12,7 +12,7 @@ public class WeaponsCMD implements CommandExecutor{
         if(!(sender instanceof Player)) return false;
         Player player = (Player) sender;
         if(!player.hasPermission("weapons.command.weapons")||args.length!=1) return false;
-        player.getInventory().addItem( Weapons.getWeapon(args[0]).getWeapon().getItem() );
+        player.getInventory().addItem( Weapons.getWeapon(args[0]).getWeaponItem() );
         return true;
     }
 }

@@ -10,3 +10,5 @@ website: https://github.com/github-dotEXE
 commands:
   afk:
     description: toggles afk
+  weapons:
+    description: /weapons [name]

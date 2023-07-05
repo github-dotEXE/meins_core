@@ -31,7 +31,12 @@ public class Weapons implements Listener {
         weaponNames.put(weaponHandle.getWeapon().getName(),weaponHandle);
         weaponItems.put(weaponHandle.getWeapon().getUUID(), weaponHandle);
 
-        Bukkit.addRecipe(weaponHandle.getWeapon().getRecipe());
+        try{
+            weaponHandle.getWeapon().getRecipe().getShape();
+            Bukkit.addRecipe(weaponHandle.getWeapon().getRecipe());
+        } catch (NullPointerException e){
+            return;
+        }
     }
     public static WeaponHandle getWeapon(String name){
         return weaponNames.getOrDefault(name,null);
