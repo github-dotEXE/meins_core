@@ -12,11 +12,13 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
     private final HashMap<Integer,List<String>> checksI = new HashMap<>();
     private final HashMap<String,List<String>> checksX = new HashMap<>();
 
-    public void addCompI(int i,String... comps){
+    public TabCompleter addCompI(int i,String... comps){
         checksI.put(i,Arrays.asList(comps));
+        return this;
     }
-    public void addCompX(String x,String... comps){
+    public TabCompleter addCompX(String x,String... comps){
         checksX.put(x,Arrays.asList(comps));
+        return this;
     }
 
     @Override
@@ -24,8 +26,8 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
         List<String> completions = new ArrayList<>();
         List<String> commands = new ArrayList<>();
 
-        commands.addAll(checksI.get(args.length));
-        commands.addAll(checksX.get(args[args.length-1]));
+        commands.addAll(checksI.getOrDefault(args.length,new ArrayList<>()));
+        if(args.length >=2) commands.addAll(checksX.getOrDefault(args[args.length-2],new ArrayList<>()));
 
         StringUtil.copyPartialMatches(args[args.length-1], commands, completions); //copy matches of first argument
 
