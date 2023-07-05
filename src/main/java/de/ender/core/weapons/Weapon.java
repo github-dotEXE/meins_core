@@ -1,5 +1,6 @@
 package de.ender.core.weapons;
 
+import de.ender.core.customItems.CustomItems;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -31,8 +32,8 @@ public interface Weapon {
         return new ShapedRecipe(getNamespacedKey(),getItem());
     }
     long getReloadTime();
-    void useEffects(Player player, Weapons.UseType useType);
-    ItemStack getAmmoItem(Weapons.UseType useType);
+    void useEffects(Player player, CustomItems.UseType useType);
+    ItemStack getAmmoItem(CustomItems.UseType useType);
     double getDamage();
 
     boolean hasRequirements(Player player);

@@ -1,7 +1,6 @@
 package de.ender.core.customItems;
 
 import de.ender.core.ItemBuilder;
-import de.ender.core.weapons.Weapons;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;

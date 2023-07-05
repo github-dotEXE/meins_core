@@ -1,7 +1,5 @@
 package de.ender.core.customItems;
 
-import de.ender.core.weapons.WeaponHandle;
-import de.ender.core.weapons.Weapons;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

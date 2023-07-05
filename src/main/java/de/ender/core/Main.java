@@ -2,14 +2,13 @@ package de.ender.core;
 
 import de.ender.core.afk.AfkCMD;
 import de.ender.core.afk.AfkManager;
+import de.ender.core.customItems.CustomItems;
 import de.ender.core.guiManagers.GuiListener;
 import de.ender.core.modifiers.ModifierManager;
 import de.ender.core.weapons.Weapons;
 import de.ender.core.weapons.WeaponsCMD;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,10 +29,12 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new PluginMessageManager(), this);
         pluginManager.registerEvents(new ModifierManager(), this);
         pluginManager.registerEvents(new GuiListener(), this);
+        pluginManager.registerEvents(new CustomItems(),this);
+        pluginManager.registerEvents(new Weapons(),this);
 
         getCommand("afk").setExecutor(new AfkCMD());
         getCommand("weapons").setExecutor(new WeaponsCMD());
-        getCommand("weapons").setTabCompleter(new TabCompleter().addCompI(1, Weapons.getWeaponNames().toArray(new String[0])));
+        getCommand("weapons").setTabCompleter(new TabCompleter().addCompI(1, Weapons.getNameSet().toArray(new String[0])));
 
         //PluginMessageManager
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
