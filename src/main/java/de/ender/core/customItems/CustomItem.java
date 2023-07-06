@@ -1,6 +1,7 @@
 package de.ender.core.customItems;
 
 import de.ender.core.ItemBuilder;
+import de.ender.core.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -13,8 +14,14 @@ import java.util.UUID;
 
 public interface CustomItem {
     default void init(){
-        Bukkit.addRecipe(getRecipe());
         CustomItems.register(this);
+        CustomItems.getCustomItem(getUUID());
+        Recipe recipe = getRecipe();
+        try{
+            if(!Bukkit.addRecipe(recipe)) Log.warn("Recipe couldn't be added");;
+        } catch(NullPointerException e) {
+            Log.info("Custom item "+getName()+" has no recipe!");
+        }
     }
 
     default ItemStack getItem(){

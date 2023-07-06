@@ -15,7 +15,9 @@ import java.util.UUID;
 
 public interface Weapon {
     default WeaponHandle init(){
-        return new WeaponHandle(this);
+        WeaponHandle weaponHandle = new WeaponHandle(this);
+        weaponHandle.init();
+        return weaponHandle;
     }
     JavaPlugin getPlugin();
     default NamespacedKey getNamespacedKey(){
@@ -29,7 +31,7 @@ public interface Weapon {
     String getName();
     ItemStack getItem();
     default ShapedRecipe getRecipe(){
-        return new ShapedRecipe(getNamespacedKey(),getItem());
+        return new ShapedRecipe(getNamespacedKey(),CustomItems.getCustomItem(getUUID()).getItem());
     }
     long getReloadTime();
     void useEffects(Player player, CustomItems.UseType useType);

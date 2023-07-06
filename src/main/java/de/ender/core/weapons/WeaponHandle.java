@@ -1,24 +1,28 @@
 package de.ender.core.weapons;
 
 import de.ender.core.ItemBuilder;
+import de.ender.core.Log;
 import de.ender.core.customItems.CustomItem;
 import de.ender.core.customItems.CustomItems;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class WeaponHandle implements CustomItem {
     private final Weapon weapon;
     private final HashMap<Player,Long> lastFired = new HashMap<>();
     WeaponHandle(Weapon weapon){
         this.weapon = weapon;
-        Weapons.register(this);
     }
+
     public Weapon getWeapon(){
         return weapon;
     }
@@ -30,7 +34,7 @@ public class WeaponHandle implements CustomItem {
         return player.getInventory().containsAtLeast(item,item.getAmount());
     }
     private boolean checkRequirements(Player player, CustomItems.UseType useType){
-        if(!Weapons.getCustomItem(player.getInventory().getItemInMainHand()).equals(this)) weapon.error(player);
+        if(!CustomItems.getCustomItem(player.getInventory().getItemInMainHand()).equals(this)) weapon.error(player);
         else if(!weapon.hasRequirements(player)) weapon.missingRequirements(player);
         else if(isOnCooldown(player)) weapon.onCooldown(player);
         else if(!hasAmmo(player,useType)) weapon.noAmmo(player);
@@ -46,6 +50,11 @@ public class WeaponHandle implements CustomItem {
     @Override
     public ItemStack getItemStack() {
         return weapon.getItem();
+    }
+
+    @Override
+    public UUID getUUID() {
+        return weapon.getUUID();
     }
 
     @Override
@@ -74,5 +83,4 @@ public class WeaponHandle implements CustomItem {
             }
         }
     }
-
 }

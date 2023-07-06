@@ -1,5 +1,6 @@
 package de.ender.core.weapons;
 
+import de.ender.core.customItems.CustomItems;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,7 +13,7 @@ public class WeaponsCMD implements CommandExecutor{
         if(!(sender instanceof Player)) return false;
         Player player = (Player) sender;
         if(!player.hasPermission("weapons.command.weapons")||args.length!=1) return false;
-        player.getInventory().addItem( Weapons.getCustomItem(args[0]).getItem() );
+        player.getInventory().addItem( CustomItems.getCustomItem(args[0]).getItem() );
         return true;
     }
 }

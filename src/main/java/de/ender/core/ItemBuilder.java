@@ -74,6 +74,13 @@ public class ItemBuilder {
         item.addEnchantment(enchantment, enchantment.getMaxLevel());
         return this;
     }
+    public ItemBuilder addEnchantmentGlint(){
+        ItemMeta itemMeta = item.getItemMeta();
+        Glow glow = new Glow();
+        itemMeta.addEnchant(glow, 1, true);
+        item.setItemMeta(itemMeta);
+        return this;
+    }
 
     public ItemStack build() {
         item.setItemMeta(itemMeta);

@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +21,8 @@ public class CustomItems implements Listener {
         USE,
         RIGHT_CLICK_ENTITY,
         HURT_ENTITY,
-        LEFT_CLICK
+        LEFT_CLICK,
+        CONSUME
     }
     private static final HashMap<String, CustomItem> names = new HashMap<>();
     private static final HashMap<UUID, CustomItem> uuids = new HashMap<>();
@@ -61,7 +63,7 @@ public class CustomItems implements Listener {
     @EventHandler
     public void onRightClickEntity(PlayerInteractEntityEvent event){
         Player player = event.getPlayer();
-        CustomItem customItem = getCustomItem(player.getInventory().getItem(event.getHand()));
+        CustomItem customItem = getCustomItem(player.getInventory().getItemInMainHand());
         if(customItem == null) return;
         event.setCancelled(true);
         customItem.use(player, UseType.RIGHT_CLICK_ENTITY);
@@ -75,5 +77,13 @@ public class CustomItems implements Listener {
             event.setCancelled(true);
             customItem.use(player, UseType.HURT_ENTITY);
         }
+    }
+    @EventHandler
+    public void onConsumption(PlayerItemConsumeEvent event){
+        Player player = event.getPlayer();
+        CustomItem customItem = getCustomItem(event.getItem());
+        if(customItem == null) return;
+        event.setCancelled(true);
+        customItem.use(player, UseType.CONSUME);
     }
 }

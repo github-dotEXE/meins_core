@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
-public class Weapons extends CustomItems implements Listener {
+public class Weapons implements Listener {
 
     @EventHandler
     public void onRangedHit(EntityDamageByEntityEvent event){
@@ -16,7 +16,7 @@ public class Weapons extends CustomItems implements Listener {
             Projectile projectile = (Projectile) event.getDamager();
             if(projectile.getShooter() instanceof Player){
                 Player player = (Player) projectile.getShooter();
-                WeaponHandle weaponHandle = (WeaponHandle) getCustomItem(player.getInventory().getItemInMainHand());
+                WeaponHandle weaponHandle = (WeaponHandle) CustomItems.getCustomItem(player.getInventory().getItemInMainHand());
                 if(weaponHandle == null) return;
                 weaponHandle.getWeapon().rangedEntityHit(player,event);
             }
@@ -28,7 +28,7 @@ public class Weapons extends CustomItems implements Listener {
         Projectile projectile = event.getEntity();
         if(projectile.getShooter() instanceof Player){
             Player player = (Player) projectile.getShooter();
-            WeaponHandle weaponHandle = (WeaponHandle) getCustomItem(player.getInventory().getItemInMainHand());
+            WeaponHandle weaponHandle = (WeaponHandle) CustomItems.getCustomItem(player.getInventory().getItemInMainHand());
             if(weaponHandle == null) return;
             weaponHandle.getWeapon().rangedHit(player,event);
         }
