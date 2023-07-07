@@ -2,8 +2,9 @@ package de.ender.core;
 
 import de.ender.core.afk.AfkCMD;
 import de.ender.core.afk.AfkManager;
+import de.ender.core.customItems.CustomFoodItemListener;
 import de.ender.core.customItems.CustomItem;
-import de.ender.core.customItems.CustomItemListener;
+import de.ender.core.customItems.CustomUsableItemListener;
 import de.ender.core.guiManagers.GuiListener;
 import de.ender.core.modifiers.ModifierManager;
 import de.ender.core.customItems.CustomItemsCMD;
@@ -34,7 +35,8 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new ModifierManager(), this);
         pluginManager.registerEvents(new GuiListener(), this);
         pluginManager.registerEvents(new WeaponListener(), this);
-        pluginManager.registerEvents(new CustomItemListener(), this);
+        pluginManager.registerEvents(new CustomUsableItemListener(), this);
+        pluginManager.registerEvents(new CustomFoodItemListener(), this);
 
         getCommand("afk").setExecutor(new AfkCMD());
         getCommand("customitems").setExecutor(new CustomItemsCMD());

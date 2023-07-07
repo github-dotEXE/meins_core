@@ -1,12 +1,14 @@
 package de.ender.core.weapons;
 
 import de.ender.core.customItems.CustomItem;
+import de.ender.core.customItems.CustomUseableItem;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
-public abstract class Weapon extends CustomItem {
+public abstract class Weapon extends CustomUseableItem {
 
     private final HashMap<Player,Long> lastFired = new HashMap<>();
     private boolean isOnCooldown(Player player){
@@ -125,6 +127,17 @@ public abstract class Weapon extends CustomItem {
         player.playSound(player,Sound.UI_BUTTON_CLICK,1,1); // test pitch and volume
         player.sendActionBar(ChatColor.GOLD+"You don't have enough ammo to use this weapon!");
     }
+
+    @Override
+    protected void register() {
+        super.register();
+    }
+
+    @Override
+    protected void switchFromSlot(Player player, PlayerItemHeldEvent event) {
+        if(isZoomed(player)) stopZooming(player);
+    }
+
     protected void notZoomed(Player player){
         player.playSound(player, Sound.BLOCK_COMPARATOR_CLICK, 1.0F, 0.3F);
         player.sendActionBar(ChatColor.GOLD + "You have to be zoomed to shoot!");

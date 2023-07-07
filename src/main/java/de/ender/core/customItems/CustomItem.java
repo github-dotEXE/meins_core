@@ -23,7 +23,6 @@ public abstract class CustomItem {
         RIGHT_CLICK_ENTITY,
         HURT_ENTITY,
         LEFT_CLICK,
-        CONSUME,
     }
     private static final HashMap<String, CustomItem> names = new HashMap<>();
     private static final HashMap<UUID, CustomItem> uuids = new HashMap<>();
@@ -80,12 +79,4 @@ public abstract class CustomItem {
     protected abstract ItemStack getItemStack();
     protected abstract Recipe getRecipe();
     public abstract String getName();
-
-    protected abstract void use(Player player, UseType use);
-    protected void switchToSlot(Player player, PlayerItemHeldEvent event){
-
-    }
-    protected void switchFromSlot(Player player, PlayerItemHeldEvent event){
-
-    }
 }
