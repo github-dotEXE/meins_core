@@ -9,7 +9,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -29,7 +28,7 @@ public abstract class Weapon extends CustomItem {
     private boolean checkRequirements(Player player, UseType useType){
         if(!CustomItem.getCustomItem(player.getInventory().getItemInMainHand()).equals(this)) error(player);
         else if(!hasRequirements(player)) missingRequirements(player);
-        else if(requireZoom(player)&&!isZoomed(player)) notZoomed(player);
+        else if(requireZoom()&&!isZoomed(player)) notZoomed(player);
         else if(isOnCooldown(player)) onCooldown(player);
         else if(!hasAmmo(player,useType)) noAmmo(player);
         else return true;
@@ -39,6 +38,7 @@ public abstract class Weapon extends CustomItem {
     public void use(@NotNull Player player, UseType useType){
         if(getZoomOnRightClick()&& Arrays.asList(UseType.USE,UseType.RIGHT_CLICK_ENTITY).contains(useType)){
             changeZoom(player);
+            if(reloadOnZoom()&&requireZoom()&&isOnCooldown(player)&&isZoomed(player)) lastFired.put(player, 0L);
             zoomEffects(player);
         } else if(checkRequirements(player, useType)){
             useEffects(player,useType);
@@ -56,12 +56,20 @@ public abstract class Weapon extends CustomItem {
             }
         }
     }
+
     protected boolean isZoomed(Player player){
         return player.getWalkSpeed() == -1F;
     }
+
     protected void changeZoom(Player player){
-        if(!isZoomed(player)) player.setWalkSpeed(-1F);
-        else player.setWalkSpeed(0.2F);
+        if(!isZoomed(player)) startZooming(player);
+        else stopZooming(player);
+    }
+    protected void stopZooming(Player player){
+        player.setWalkSpeed(0.2F);
+    }
+    protected void startZooming(Player player){
+        player.setWalkSpeed(-1F);
     }
 
     public NamespacedKey getNamespacedKey(){
@@ -80,7 +88,10 @@ public abstract class Weapon extends CustomItem {
     public abstract ItemStack getAmmoItem(UseType useType);
     public abstract double getDamage();
     public abstract boolean hasRequirements(Player player);
-    protected boolean requireZoom(Player player) {
+    protected boolean requireZoom() {
+        return false;
+    }
+    protected boolean reloadOnZoom() {
         return false;
     }
     protected void zoomEffects(Player player) {

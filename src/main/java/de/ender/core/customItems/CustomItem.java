@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,7 +23,7 @@ public abstract class CustomItem {
         RIGHT_CLICK_ENTITY,
         HURT_ENTITY,
         LEFT_CLICK,
-        CONSUME
+        CONSUME,
     }
     private static final HashMap<String, CustomItem> names = new HashMap<>();
     private static final HashMap<UUID, CustomItem> uuids = new HashMap<>();
@@ -81,4 +82,10 @@ public abstract class CustomItem {
     public abstract String getName();
 
     protected abstract void use(Player player, UseType use);
+    protected void switchToSlot(Player player, PlayerItemHeldEvent event){
+
+    }
+    protected void switchFromSlot(Player player, PlayerItemHeldEvent event){
+
+    }
 }

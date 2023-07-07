@@ -7,6 +7,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 
 public class CustomItemListener implements Listener {
     @EventHandler
@@ -43,5 +44,13 @@ public class CustomItemListener implements Listener {
         if(customItem == null) return;
         event.setCancelled(true);
         customItem.use(player, CustomItem.UseType.CONSUME);
+    }
+    @EventHandler
+    public void onSwitchHotbar(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        CustomItem itemP = CustomItem.getCustomItem(player.getInventory().getItem(event.getPreviousSlot()));
+        CustomItem itemN = CustomItem.getCustomItem(player.getInventory().getItem(event.getNewSlot()));
+        if (itemP != null) itemP.switchFromSlot(player, event);
+        if (itemN != null) itemN.switchToSlot(player, event);
     }
 }
