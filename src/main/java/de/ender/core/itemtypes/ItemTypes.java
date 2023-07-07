@@ -1,10 +1,11 @@
 package de.ender.core.itemtypes;
 
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ItemTypes {
     private static final Map<String,ItemType> itemTypesByKeys = new HashMap<String, ItemType>() {{

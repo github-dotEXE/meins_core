@@ -312,7 +312,7 @@ public class PluginMessageManager implements PluginMessageListener, Listener {
                 Main plugin = Main.getPlugin();
                 CConfig cconfig = new CConfig(Main.BUNGEE_DATA, plugin);
                 FileConfiguration config = cconfig.getCustomConfig();
-                config.set("servers",Arrays.asList(serverL));
+                if(serverL.length != 0) config.set("servers",Arrays.asList(serverL));
                 cconfig.save();
             });
         }
@@ -321,7 +321,11 @@ public class PluginMessageManager implements PluginMessageListener, Listener {
         Main plugin = Main.getPlugin();
         CConfig cconfig = new CConfig(Main.BUNGEE_DATA, plugin);
         FileConfiguration config = cconfig.getCustomConfig();
-        return config.getStringList("servers");
+
+        List<String> serverL = config.getStringList("servers");
+        if(serverL.isEmpty()) serversInit();
+
+        return serverL;
     }
     @EventHandler
     public void onJoin(PlayerJoinEvent event){

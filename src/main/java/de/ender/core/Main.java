@@ -2,11 +2,12 @@ package de.ender.core;
 
 import de.ender.core.afk.AfkCMD;
 import de.ender.core.afk.AfkManager;
-import de.ender.core.customItems.CustomItems;
+import de.ender.core.customItems.CustomItem;
+import de.ender.core.customItems.CustomItemListener;
 import de.ender.core.guiManagers.GuiListener;
 import de.ender.core.modifiers.ModifierManager;
-import de.ender.core.weapons.Weapons;
-import de.ender.core.weapons.WeaponsCMD;
+import de.ender.core.customItems.CustomItemsCMD;
+import de.ender.core.weapons.WeaponListener;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -32,12 +33,12 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new PluginMessageManager(), this);
         pluginManager.registerEvents(new ModifierManager(), this);
         pluginManager.registerEvents(new GuiListener(), this);
-        pluginManager.registerEvents(new CustomItems(),this);
-        pluginManager.registerEvents(new Weapons(),this);
+        pluginManager.registerEvents(new WeaponListener(), this);
+        pluginManager.registerEvents(new CustomItemListener(), this);
 
         getCommand("afk").setExecutor(new AfkCMD());
-        getCommand("weapons").setExecutor(new WeaponsCMD());
-        getCommand("weapons").setTabCompleter(new TabCompleter().addCompI(1, CustomItems.getNameSet().toArray(new String[0])));
+        getCommand("customitems").setExecutor(new CustomItemsCMD());
+        getCommand("customitems").setTabCompleter(new TabCompleter().addCompI(1, CustomItem::getNames));
 
         //PluginMessageManager
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
