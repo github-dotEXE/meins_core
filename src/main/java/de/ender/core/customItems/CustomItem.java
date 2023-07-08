@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +17,16 @@ import java.util.List;
 import java.util.UUID;
 
 public abstract class CustomItem {
+    private final String name;
+    private final ItemStack item;
+    private final JavaPlugin plugin;
+
+    public CustomItem(String name, ItemStack item, JavaPlugin plugin){
+        this.name = name;
+        this.item = item;
+        this.plugin = plugin;
+        init();
+    }
     protected enum UseType{
         USE,
         RIGHT_CLICK_ENTITY,
@@ -51,20 +60,28 @@ public abstract class CustomItem {
     public static ArrayList<String> getNames(){
         return new ArrayList<>(names.keySet());
     }
+    protected void removeItem(Player player,ItemStack item){
+        for (ItemStack items: player.getInventory()) {
+            if(items!=null&&items.asOne().equals(item.asOne())){
+                items.setAmount(items.getAmount()-1);
+                break;
+            }
+        }
+    }
     
-    public void init(){
+    protected void init(){
         register();
         getCustomItem(getUUID());
         Recipe recipe = getRecipe();
         try{
-            if(!Bukkit.addRecipe(recipe)) Log.warn("Recipe couldn't be added");;
+            if(!Bukkit.addRecipe(recipe)) Log.warn("Recipe couldn't be added");
         } catch(NullPointerException e) {
             Log.info("Custom item "+getName()+" has no recipe!");
         }
     }
 
     public ItemStack getItem(){
-        return new ItemBuilder(getItemStack()).addLore(ChatColor.DARK_GRAY+"ItemID: "+getUUID().toString()).build();
+        return new ItemBuilder(this.item).addLore(ChatColor.DARK_GRAY+"ItemID: "+getUUID().toString()).build();
     }
 
     public UUID getUUID() {
@@ -75,8 +92,11 @@ public abstract class CustomItem {
         return new NamespacedKey(getPlugin(),getClass().getName());
     }
 
-    protected abstract JavaPlugin getPlugin();
-    protected abstract ItemStack getItemStack();
+    public JavaPlugin getPlugin(){
+        return this.plugin;
+    }
     protected abstract Recipe getRecipe();
-    public abstract String getName();
+    public String getName(){
+        return name;
+    }
 }

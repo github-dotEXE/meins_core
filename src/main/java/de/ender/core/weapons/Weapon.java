@@ -11,6 +11,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -20,42 +21,58 @@ import java.util.UUID;
 public abstract class Weapon extends CustomUseableItem {
 
     private final HashMap<Player,Long> lastFired = new HashMap<>();
-    private boolean isOnCooldown(Player player){
-        return !((System.currentTimeMillis()-lastFired.getOrDefault(player, 0L))>=getReloadTime());
+    private final boolean zoomable;
+    private final float reloadTime;
+    private final ItemStack ammoItem;
+    private final double damage;
+    private final boolean requireZoom;
+    private final boolean reloadOnZoom;
+    private final Sound fireingSound;
+    private final float fireingSoundVolume;
+    private final float fireingSoundPitch;
+
+    public Weapon(String name, ItemStack item,ItemStack ammoItem, JavaPlugin plugin,float reloadTime,double damage,
+                  boolean zoomable,boolean requireZoom,boolean reloadOnZoom,
+                  Sound fireingSound,float fireingSoundVolume,float fireingSoundPitch) {
+        super(name, item, plugin);
+        this.reloadTime = reloadTime;
+        this.zoomable = zoomable;
+        this.ammoItem = ammoItem;
+        this.damage = damage;
+        this.requireZoom = requireZoom;
+        this.reloadOnZoom = reloadOnZoom;
+        this.fireingSound = fireingSound;
+        this.fireingSoundVolume = fireingSoundVolume;
+        this.fireingSoundPitch = fireingSoundPitch;
     }
-    private boolean hasAmmo(Player player, UseType useType) {
-        ItemStack item = getAmmoItem(useType).asOne();
+
+    private boolean isOnCooldown(Player player){
+        return !((System.currentTimeMillis()-lastFired.getOrDefault(player, 0L))>=reloadTime);
+    }
+    private boolean hasAmmo(Player player) {
+        ItemStack item = ammoItem.asOne();
         return player.getInventory().containsAtLeast(item,item.getAmount());
     }
-    private boolean checkRequirements(Player player, UseType useType){
+    private boolean checkRequirements(Player player){
         if(!CustomItem.getCustomItem(player.getInventory().getItemInMainHand()).equals(this)) error(player);
         else if(!hasRequirements(player)) missingRequirements(player);
-        else if(requireZoom()&&!isZoomed(player)) notZoomed(player);
+        else if(requireZoom&&!isZoomed(player)) notZoomed(player);
         else if(isOnCooldown(player)) onCooldown(player);
-        else if(!hasAmmo(player,useType)) noAmmo(player);
+        else if(!hasAmmo(player)) noAmmo(player);
         else return true;
         return false;
     }
 
     public void use(@NotNull Player player, UseType useType){
-        if(getZoomOnRightClick()&& Arrays.asList(UseType.USE,UseType.RIGHT_CLICK_ENTITY).contains(useType)){
+        if(zoomable&& Arrays.asList(UseType.USE,UseType.RIGHT_CLICK_ENTITY).contains(useType)){
             changeZoom(player);
-            if(reloadOnZoom()&&requireZoom()&&isOnCooldown(player)&&isZoomed(player)) lastFired.put(player, 0L);
+            if(reloadOnZoom&&requireZoom&&isOnCooldown(player)&&isZoomed(player)) lastFired.put(player, 0L);
             zoomEffects(player);
-        } else if(checkRequirements(player, useType)){
+        } else if(checkRequirements(player)){
             useEffects(player,useType);
-            player.playSound(player,getFireingSound(),getFireingSoundVolume(),getFireingSoundPitch());
+            player.playSound(player,fireingSound,fireingSoundVolume,fireingSoundPitch);
             lastFired.put(player,System.currentTimeMillis());
-            removeAmmo(player,useType);
-        }
-    }
-    private void removeAmmo(Player player, UseType useType){
-        for (ItemStack item:
-                player.getInventory()) {
-            if(item!=null&&item.asOne().equals(getAmmoItem(useType).asOne())){
-                item.setAmount(item.getAmount()-1);
-                break;
-            }
+            removeItem(player,getItem());
         }
     }
 
@@ -81,35 +98,15 @@ public abstract class Weapon extends CustomUseableItem {
         byte[] result = getNamespacedKey().toString().getBytes();
         return UUID.nameUUIDFromBytes(result);
     }
-    public ShapedRecipe getRecipe(){
-        return new ShapedRecipe(getNamespacedKey(),getCustomItem(getUUID()).getItem());
-    }
-    protected abstract boolean getZoomOnRightClick();
-    public abstract long getReloadTime();
-    public abstract void useEffects(Player player, UseType useType);
-    public abstract ItemStack getAmmoItem(UseType useType);
-    public abstract double getDamage();
-    public abstract boolean hasRequirements(Player player);
-    protected boolean requireZoom() {
-        return false;
-    }
-    protected boolean reloadOnZoom() {
-        return false;
-    }
+
     protected void zoomEffects(Player player) {
         player.playSound(player,Sound.ITEM_SPYGLASS_USE,1,1);
     }
-    protected Sound getFireingSound(){
-        return Sound.ENTITY_ARROW_SHOOT;
+    public ShapedRecipe getRecipe(){
+        return new ShapedRecipe(getNamespacedKey(),getCustomItem(getUUID()).getItem());
     }
-
-    protected float getFireingSoundVolume() {
-        return 1;
-    }
-
-    protected float getFireingSoundPitch() {
-        return 1;
-    }
+    public abstract void useEffects(Player player, UseType useType);
+    public abstract boolean hasRequirements(Player player);
 
     protected void missingRequirements(Player player){
         player.playSound(player, Sound.ENTITY_VILLAGER_NO,1,1);
@@ -129,22 +126,15 @@ public abstract class Weapon extends CustomUseableItem {
     }
 
     @Override
-    protected void register() {
-        super.register();
-    }
-
-    @Override
     protected void switchFromSlot(Player player, PlayerItemHeldEvent event) {
         if(isZoomed(player)) stopZooming(player);
     }
-
     protected void notZoomed(Player player){
         player.playSound(player, Sound.BLOCK_COMPARATOR_CLICK, 1.0F, 0.3F);
         player.sendActionBar(ChatColor.GOLD + "You have to be zoomed to shoot!");
     }
-
     public void rangedEntityHit(Player player, EntityDamageByEntityEvent event){
-        event.setDamage(getDamage());
+        event.setDamage(damage);
     }
 
     public void rangedHit(Player player, ProjectileHitEvent event){
