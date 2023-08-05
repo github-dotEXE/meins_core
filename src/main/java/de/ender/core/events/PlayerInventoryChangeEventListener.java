@@ -1,5 +1,6 @@
 package de.ender.core.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ public class PlayerInventoryChangeEventListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getOldCursor();
         PlayerInventoryChangeEvent playerInventoryChangeEvent = new PlayerInventoryChangeEvent(player,item);
+        Bukkit.getServer().getPluginManager().callEvent(playerInventoryChangeEvent);
         if(playerInventoryChangeEvent.isCancelled()) {
             event.setCancelled(true);
             event.setResult(Event.Result.DENY);
@@ -27,6 +29,7 @@ public class PlayerInventoryChangeEventListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
         PlayerInventoryChangeEvent playerInventoryChangeEvent = new PlayerInventoryChangeEvent(player,item);
+        Bukkit.getServer().getPluginManager().callEvent(playerInventoryChangeEvent);
         if(playerInventoryChangeEvent.isCancelled()) {
             event.setCancelled(true);
             event.setResult(Event.Result.DENY);
@@ -38,6 +41,7 @@ public class PlayerInventoryChangeEventListener implements Listener {
         Player player = (Player) event.getEntity();
         ItemStack item = event.getItem().getItemStack();
         PlayerInventoryChangeEvent playerInventoryChangeEvent = new PlayerInventoryChangeEvent(player,item);
+        Bukkit.getServer().getPluginManager().callEvent(playerInventoryChangeEvent);
         if(playerInventoryChangeEvent.isCancelled()) {
             event.setCancelled(true);
         }
@@ -47,6 +51,7 @@ public class PlayerInventoryChangeEventListener implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         PlayerInventoryChangeEvent playerInventoryChangeEvent = new PlayerInventoryChangeEvent(player,item);
+        Bukkit.getServer().getPluginManager().callEvent(playerInventoryChangeEvent);
         if(playerInventoryChangeEvent.isCancelled()) {
             event.setCancelled(true);
         }
@@ -56,6 +61,7 @@ public class PlayerInventoryChangeEventListener implements Listener {
         Player player = event.getPlayer();
         ItemStack item = event.getItemDrop().getItemStack();
         PlayerInventoryChangeEvent playerInventoryChangeEvent = new PlayerInventoryChangeEvent(player,item);
+        Bukkit.getServer().getPluginManager().callEvent(playerInventoryChangeEvent);
         if(playerInventoryChangeEvent.isCancelled()) {
             event.setCancelled(true);
         }
