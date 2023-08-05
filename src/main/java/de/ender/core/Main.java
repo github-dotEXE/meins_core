@@ -5,6 +5,7 @@ import de.ender.core.afk.AfkManager;
 import de.ender.core.customItems.CustomFoodItemListener;
 import de.ender.core.customItems.CustomItem;
 import de.ender.core.customItems.CustomUsableItemListener;
+import de.ender.core.events.PlayerInventoryChangeEventListener;
 import de.ender.core.guiManagers.GuiListener;
 import de.ender.core.modifiers.ModifierManager;
 import de.ender.core.customItems.CustomItemsCMD;
@@ -37,6 +38,7 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new WeaponListener(), this);
         pluginManager.registerEvents(new CustomUsableItemListener(), this);
         pluginManager.registerEvents(new CustomFoodItemListener(), this);
+        pluginManager.registerEvents(new PlayerInventoryChangeEventListener(), this);
 
         getCommand("afk").setExecutor(new AfkCMD());
         getCommand("customitems").setExecutor(new CustomItemsCMD());
@@ -61,6 +63,9 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         Log.disable(this);
         Log.printLogo();
+
+        Bukkit.getOnlinePlayers().iterator().forEachRemaining(AfkManager::playerLeave);
+
         this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
         this.getServer().getMessenger().unregisterIncomingPluginChannel(this);
     }
