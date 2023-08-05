@@ -1,17 +1,20 @@
 package de.ender.core.weapons;
 
+import de.ender.core.Main;
 import de.ender.core.customItems.CustomItem;
 import de.ender.core.customItems.CustomUseableItem;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -23,7 +26,6 @@ public abstract class Weapon extends CustomUseableItem {
     private final HashMap<Player,Long> lastFired = new HashMap<>();
     private final boolean zoomable;
     private final float reloadTime;
-    private final ItemStack ammoItem;
     private final double damage;
     private final boolean requireZoom;
     private final boolean reloadOnZoom;
@@ -31,13 +33,12 @@ public abstract class Weapon extends CustomUseableItem {
     private final float fireingSoundVolume;
     private final float fireingSoundPitch;
 
-    public Weapon(String name, ItemStack item,ItemStack ammoItem, JavaPlugin plugin,float reloadTime,double damage,
+    public Weapon(String name,JavaPlugin plugin,float reloadTime,double damage,
                   boolean zoomable,boolean requireZoom,boolean reloadOnZoom,
                   Sound fireingSound,float fireingSoundVolume,float fireingSoundPitch) {
-        super(name, item, plugin);
+        super(name, plugin);
         this.reloadTime = reloadTime;
         this.zoomable = zoomable;
-        this.ammoItem = ammoItem;
         this.damage = damage;
         this.requireZoom = requireZoom;
         this.reloadOnZoom = reloadOnZoom;
@@ -47,10 +48,10 @@ public abstract class Weapon extends CustomUseableItem {
     }
 
     private boolean isOnCooldown(Player player){
-        return !((System.currentTimeMillis()-lastFired.getOrDefault(player, 0L))>=reloadTime);
+        return !((System.currentTimeMillis()-lastFired.getOrDefault(player, 0L))>=reloadTime*1000);
     }
     private boolean hasAmmo(Player player) {
-        ItemStack item = ammoItem.asOne();
+        ItemStack item = getAmmoItem();
         return player.getInventory().containsAtLeast(item,item.getAmount());
     }
     private boolean checkRequirements(Player player){
@@ -72,7 +73,7 @@ public abstract class Weapon extends CustomUseableItem {
             useEffects(player,useType);
             player.playSound(player,fireingSound,fireingSoundVolume,fireingSoundPitch);
             lastFired.put(player,System.currentTimeMillis());
-            removeItem(player,getItem());
+            removeItem(player,getAmmoItem());
         }
     }
 
@@ -90,7 +91,50 @@ public abstract class Weapon extends CustomUseableItem {
     protected void startZooming(Player player){
         player.setWalkSpeed(-1F);
     }
+    protected <T extends Projectile> T shootProjectile(Player player, Class<? extends T> projectile, float speed,
+                                                       float spread, float removeAfter){
+        T bullet = player.launchProjectile(projectile);
+        if(isZoomed(player)) spread = 0;
+        bullet.setVelocity(player.getEyeLocation().getDirection().clone().multiply(speed*3.3).add(
+                new Vector((Math.random()-0.5)*spread,(Math.random()-0.5)*spread,(Math.random()-0.5)*spread)));
 
+        if(!Arrays.asList(0,-1,Float.MAX_VALUE,Integer.MAX_VALUE).contains(removeAfter)) {
+            new BukkitRunnable() {
+                public void run() {
+                    bullet.remove();
+                }
+            }.runTaskLater(Main.getPlugin(), (long) (removeAfter * 20));
+        }
+
+        return bullet;
+    }
+    protected Arrow shootArrow(Player player, float speed, float spread, float removeAfter, boolean gravity,
+                               boolean visualFire, boolean glowing, AbstractArrow.PickupStatus pickupStatus){
+        Arrow bullet = shootProjectile(player, Arrow.class, speed, spread, removeAfter);
+        bullet.setDamage(0);
+        bullet.setVisualFire(visualFire);
+        bullet.setGravity(gravity);
+        bullet.setPickupStatus(pickupStatus);
+        bullet.setGlowing(glowing);
+        return bullet;
+    }
+    protected Snowball shootItem(Player player, float speed, ItemStack item, float spread, float removeAfter,
+                                 boolean gravity, boolean visualFire, boolean glowing){
+        Snowball bullet = shootProjectile(player, Snowball.class, speed, spread, removeAfter);
+        bullet.setItem(item);
+        bullet.setGravity(gravity);
+        bullet.setVisualFire(visualFire);
+        bullet.setGlowing(glowing);
+        return bullet;
+    }
+    protected Snowball shootAmmo(Player player, float speed, float spread, float removeAfter, boolean gravity,
+                                 boolean visualFire, boolean glowing){
+        return shootItem(player, speed, getAmmoItem(), spread, removeAfter, gravity, visualFire, glowing);
+    }
+
+    protected double getDamage(){
+        return damage;
+    }
     public NamespacedKey getNamespacedKey(){
         return new NamespacedKey(getPlugin(),getClass().getName());
     }
@@ -107,6 +151,7 @@ public abstract class Weapon extends CustomUseableItem {
     }
     public abstract void useEffects(Player player, UseType useType);
     public abstract boolean hasRequirements(Player player);
+    public abstract ItemStack getAmmoItem();
 
     protected void missingRequirements(Player player){
         player.playSound(player, Sound.ENTITY_VILLAGER_NO,1,1);
@@ -124,14 +169,14 @@ public abstract class Weapon extends CustomUseableItem {
         player.playSound(player,Sound.UI_BUTTON_CLICK,1,1); // test pitch and volume
         player.sendActionBar(ChatColor.GOLD+"You don't have enough ammo to use this weapon!");
     }
+    protected void notZoomed(Player player){
+        player.playSound(player, Sound.BLOCK_COMPARATOR_CLICK, 1.0F, 0.3F);
+        player.sendActionBar(ChatColor.GOLD + "You have to be zoomed to shoot!");
+    }
 
     @Override
     protected void switchFromSlot(Player player, PlayerItemHeldEvent event) {
         if(isZoomed(player)) stopZooming(player);
-    }
-    protected void notZoomed(Player player){
-        player.playSound(player, Sound.BLOCK_COMPARATOR_CLICK, 1.0F, 0.3F);
-        player.sendActionBar(ChatColor.GOLD + "You have to be zoomed to shoot!");
     }
     public void rangedEntityHit(Player player, EntityDamageByEntityEvent event){
         event.setDamage(damage);

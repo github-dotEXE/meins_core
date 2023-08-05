@@ -18,14 +18,11 @@ import java.util.UUID;
 
 public abstract class CustomItem {
     private final String name;
-    private final ItemStack item;
     private final JavaPlugin plugin;
 
-    public CustomItem(String name, ItemStack item, JavaPlugin plugin){
+    public CustomItem(String name, JavaPlugin plugin){
         this.name = name;
-        this.item = item;
         this.plugin = plugin;
-        init();
     }
     protected enum UseType{
         USE,
@@ -63,13 +60,14 @@ public abstract class CustomItem {
     protected void removeItem(Player player,ItemStack item){
         for (ItemStack items: player.getInventory()) {
             if(items!=null&&items.asOne().equals(item.asOne())){
-                items.setAmount(items.getAmount()-1);
+                items.setAmount(items.getAmount()-item.getAmount());
                 break;
             }
         }
     }
     
-    protected void init(){
+    public void init(){
+        Bukkit.removeRecipe(getNamespacedKey());
         register();
         getCustomItem(getUUID());
         Recipe recipe = getRecipe();
@@ -81,15 +79,16 @@ public abstract class CustomItem {
     }
 
     public ItemStack getItem(){
-        return new ItemBuilder(this.item).addLore(ChatColor.DARK_GRAY+"ItemID: "+getUUID().toString()).build();
+        return new ItemBuilder(getItemStack()).addLore(ChatColor.DARK_GRAY+"ItemID: "+getUUID().toString()).build().asOne();
     }
+    protected abstract ItemStack getItemStack();
 
     public UUID getUUID() {
         byte[] result = getNamespacedKey().toString().getBytes();
         return UUID.nameUUIDFromBytes(result);
     }
     public NamespacedKey getNamespacedKey(){
-        return new NamespacedKey(getPlugin(),getClass().getName());
+        return new NamespacedKey(getPlugin(),getName());
     }
 
     public JavaPlugin getPlugin(){

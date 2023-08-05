@@ -85,7 +85,7 @@ public class UpdateChecker {
         return this;
     }
     public UpdateChecker downloadLatestMeins(String name){
-        return downloadLatest("http://repo.etwas--anders.de:8080/releases/de/ender/${name}/${version}/${name}-${version}.jar",name);
+        return downloadLatest("http://repo.etwas--anders.de/releases/de/ender/${name}/${version}/${name}-${version}.jar",name);
     }
     public UpdateChecker downloadLatestMeins(){
         String name;

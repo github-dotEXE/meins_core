@@ -2,14 +2,13 @@ package de.ender.core.customItems;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class CustomFoodItem extends CustomItem {
     private final int hunger;
     private final float saturation;
-    public CustomFoodItem(String name, ItemStack item, JavaPlugin plugin, int hunger, float saturation) {
-        super(name, item, plugin);
+    public CustomFoodItem(String name, JavaPlugin plugin, int hunger, float saturation) {
+        super(name, plugin);
         this.hunger = hunger;
         this.saturation = saturation;
     }

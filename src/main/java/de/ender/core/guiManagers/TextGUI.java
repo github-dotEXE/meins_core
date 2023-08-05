@@ -24,7 +24,7 @@ public class TextGUI extends CustomGUI {
         if(im == null) return;
         if(item.equals(event.getView().getItem(2))) {
             consumer.accept(PlainTextComponentSerializer.plainText().serialize(im.displayName()));
-            GuiListener.unregisterGUI(this);
+            unregisterGUI(this);
             event.getInventory().setContents(new ItemStack[0]);
             getPlayer().closeInventory();
         }
@@ -35,7 +35,7 @@ public class TextGUI extends CustomGUI {
     @Override
     public void cancel(InventoryCloseEvent event) {
         consumer.accept(ifFail);
-        GuiListener.unregisterGUI(this);
+        unregisterGUI(this);
         event.getInventory().setContents(new ItemStack[0]);
     }
 

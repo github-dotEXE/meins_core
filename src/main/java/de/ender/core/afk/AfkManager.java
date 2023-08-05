@@ -25,6 +25,7 @@ public class AfkManager implements Listener {
     }
 
     public static void playerLeave(Player player){
+        callAFKLeave(player);
         lastMovement.remove(player);
         stopCurrentTask(player);
     }
@@ -81,6 +82,10 @@ public class AfkManager implements Listener {
     }
     private static void callAFKJoin(Player player) {
         AfkJoinEvent event = new AfkJoinEvent(player);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+    private static void callAFKLeave(Player player) {
+        AfkLeaveEvent event = new AfkLeaveEvent(player);
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
 

@@ -22,11 +22,11 @@ public class BoolGUI extends CustomGUI {
         if(item.equals(trueItem)){
             event.getView().close();
             consumer.accept(true);
-            GuiListener.unregisterGUI(this);
+            unregisterGUI(this);
         } else if(item.equals(falseItem)){
             event.getView().close();
             consumer.accept(false);
-            GuiListener.unregisterGUI(this);
+            unregisterGUI(this);
         }
         event.setResult(Event.Result.DENY);
         event.setCancelled(true);
@@ -34,7 +34,7 @@ public class BoolGUI extends CustomGUI {
     @Override
     public void cancel(InventoryCloseEvent event) {
         consumer.accept(ifFail);
-        GuiListener.unregisterGUI(this);
+        unregisterGUI(this);
     }
 
     public BoolGUI(Player player, String question, Boolean ifFail,Consumer<Boolean> consumer){
