@@ -19,7 +19,7 @@ public class FloatTextCMD implements CommandExecutor {
         switch (args[0]) {
             case "add":
                 FloatTextManager.addFloatText(player.getLocation(),
-                        String.join(" ", Arrays.copyOfRange(args, 1, args.length)),
+                        String.join(" ", Arrays.copyOfRange(args, 4, args.length)),
                         Boolean.parseBoolean(args[2]),
                         args[3],
                         new NamespacedKey(Main.getPlugin(), args[1]));
@@ -30,14 +30,16 @@ public class FloatTextCMD implements CommandExecutor {
             case "set":
                 switch (args[1]) {
                     case "text":
-                        FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[2])).setText(
-                                String.join(" ", Arrays.copyOfRange(args, 3, args.length)));
+                        FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[2]))
+                                .setText(String.join(" ", Arrays.copyOfRange(args, 3, args.length)));
                         break;
                     case "billboard":
-                        FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[2])).setBillboard(args[3]);
+                        FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[2]))
+                                .setBillboard(args[3]);
                         break;
                     case "shadowed":
-                        FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[2])).setShadowed(Boolean.parseBoolean(args[3]));
+                        FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[2]))
+                                .setShadowed(Boolean.parseBoolean(args[3]));
                         break;
                 }
         }

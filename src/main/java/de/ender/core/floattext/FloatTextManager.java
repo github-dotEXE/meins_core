@@ -56,6 +56,7 @@ public class FloatTextManager {
         return floatTextIDs.get(id);
     }
     public static void addFloatText(Location location, String text,boolean shadowed,String billboard, NamespacedKey id){
+        if(getByID(id)!=null) removeFloatText(getByID(id));
         FloatText floatText = new FloatText(location,text,shadowed,billboard,id);
         UUID uuid = floatText.getUuid();
         floatTexts.put(uuid,floatText);

@@ -50,13 +50,17 @@ public final class Main extends JavaPlugin {
         getCommand("floattext").setExecutor(new FloatTextCMD());
         getCommand("floattext").setTabCompleter(new TabCompleter()
                 .addCompI(0,"add","remove","set")
-                .addMultiPathedComp(FloatTextManager::getIDList,"remove","set")
+                .addMultiPathedComp(FloatTextManager::getIDList,"remove","set.x")
                 .addPredicateComp((i)-> i>=4,()->{
                     ArrayList<String> players = new ArrayList<>();
                     Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
                     return players;})
+                .addPathedComp("set.text.x",()->{
+                    ArrayList<String> players = new ArrayList<>();
+                    Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
+                    return players;})
                 .addPathedComp("set","text","shadowed","billboard")
-                .addMultiPathedComp(new String[]{"True","False"},"add.x","set.shadowed")
+                .addMultiPathedComp(new String[]{"True","False"},"add.x","set.shadowed.x")
                 .addMultiPathedComp(()->{
                     ArrayList<String> settings = new ArrayList<>();
                     for (Display.Billboard billboard:
@@ -64,7 +68,7 @@ public final class Main extends JavaPlugin {
                         settings.add(billboard.name());
                     }
                     return settings;
-                },"set.billboard", "add.x.x")
+                },"set.billboard.x", "add.x.x")
 
         );
         //PluginMessageManager
