@@ -22,10 +22,10 @@ public class FloatTextCMD implements CommandExecutor {
                         new NamespacedKey(Main.getPlugin(),args[1]));
                 break;
             case "remove":
-                FloatTextManager.removeFloatText(FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(),args[1])));
+                FloatTextManager.removeFloatText(FloatTextManager.getByID(NamespacedKey.fromString(args[1])));
                 break;
             case "set":
-                FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(),args[1])).setText(
+                FloatTextManager.getByID(NamespacedKey.fromString(args[1])).setText(
                         String.join(" ", Arrays.copyOfRange(args, 2, args.length)));
                 break;
         }

@@ -49,7 +49,7 @@ public final class Main extends JavaPlugin {
         getCommand("floattext").setExecutor(new FloatTextCMD());
         getCommand("floattext").setTabCompleter(new TabCompleter()
                 .addCompI(0,"add","remove","set")
-                .addCompI(1, FloatTextManager::getIDList)
+                .addMultiPathedComp(FloatTextManager::getIDList,"remove","set")
                 .addPredicateComp((i)-> i>=2,()->{
                     ArrayList<String> players = new ArrayList<>();
                     Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
