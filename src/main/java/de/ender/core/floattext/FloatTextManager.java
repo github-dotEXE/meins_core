@@ -44,7 +44,9 @@ public class FloatTextManager {
     }
     public static ArrayList<String> getIDList(){
         ArrayList<String> ids = new ArrayList<>();
-        floatTextIDs.keySet().forEach((id)->ids.add(id.asString()));
+        floatTextIDs.keySet().forEach((id)-> {
+            if(id.getNamespace().equals(Main.getPlugin().getPluginMeta().getName())) ids.add(id.getKey());
+        });
         return ids;
     }
     public static FloatText getByUUID(UUID uuid){

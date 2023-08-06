@@ -6,8 +6,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 
+import javax.naming.Name;
 import java.util.Arrays;
 
 public class FloatTextCMD implements CommandExecutor {
@@ -22,10 +24,11 @@ public class FloatTextCMD implements CommandExecutor {
                         new NamespacedKey(Main.getPlugin(),args[1]));
                 break;
             case "remove":
-                FloatTextManager.removeFloatText(FloatTextManager.getByID(NamespacedKey.fromString(args[1])));
+                FloatTextManager.removeFloatText(FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(),args[1])));
                 break;
             case "set":
-                FloatTextManager.getByID(NamespacedKey.fromString(args[1])).setText(
+
+                FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(),args[1])).setText(
                         String.join(" ", Arrays.copyOfRange(args, 2, args.length)));
                 break;
         }
