@@ -44,7 +44,7 @@ public class FloatTextCMD implements CommandExecutor {
                 }
                 break;
             case "put":
-                CustomFloatTextManager.getCustomFloatTextByID(NamespacedKey.fromString(args[1]));
+                CustomFloatTextManager.getCustomFloatTextByID(NamespacedKey.fromString(args[1])).spawn(player.getLocation());
                 break;
         }
         return true;
