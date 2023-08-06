@@ -42,6 +42,10 @@ public class FloatTextCMD implements CommandExecutor {
                                 .setShadowed(Boolean.parseBoolean(args[3]));
                         break;
                 }
+                break;
+            case "put":
+                CustomFloatTextManager.getCustomFloatTextByID(NamespacedKey.fromString(args[1]));
+                break;
         }
         return true;
     }

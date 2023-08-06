@@ -6,6 +6,7 @@ import de.ender.core.customItems.CustomFoodItemListener;
 import de.ender.core.customItems.CustomItem;
 import de.ender.core.customItems.CustomUsableItemListener;
 import de.ender.core.events.PlayerInventoryChangeEventListener;
+import de.ender.core.floattext.CustomFloatTextManager;
 import de.ender.core.floattext.FloatTextCMD;
 import de.ender.core.floattext.FloatTextManager;
 import de.ender.core.guiManagers.GuiListener;
@@ -49,7 +50,7 @@ public final class Main extends JavaPlugin {
         getCommand("customitems").setTabCompleter(new TabCompleter().addCompI(1, CustomItem::getNames));
         getCommand("floattext").setExecutor(new FloatTextCMD());
         getCommand("floattext").setTabCompleter(new TabCompleter()
-                .addCompI(0,"add","remove","set")
+                .addCompI(0,"add","remove","set","put")
                 .addMultiPathedComp(FloatTextManager::getIDList,"remove","set.x")
                 .addPredicateComp((i)-> i>=4,()->{
                     ArrayList<String> players = new ArrayList<>();
@@ -69,6 +70,7 @@ public final class Main extends JavaPlugin {
                     }
                     return settings;
                 },"set.billboard.x", "add.x.x")
+                .addPathedComp("put", CustomFloatTextManager::getCustomFloatTexts)
 
         );
         //PluginMessageManager
