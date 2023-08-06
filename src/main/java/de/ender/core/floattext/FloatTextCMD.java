@@ -20,14 +20,19 @@ public class FloatTextCMD implements CommandExecutor {
         switch (args[0]){
             case "add":
                 FloatTextManager.addFloatText(player.getLocation(),
-                        String.join(" ", Arrays.copyOfRange(args, 2, args.length)),
+                        String.join(" ", Arrays.copyOfRange(args, 1, args.length)),
+                        Boolean.parseBoolean(args[2]),
                         new NamespacedKey(Main.getPlugin(),args[1]));
                 break;
             case "remove":
                 FloatTextManager.removeFloatText(FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(),args[1])));
                 break;
             case "set":
+                if(args[1].equals("text")){
 
+                }else if(args[1].equals("turns")){
+
+                }
                 FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(),args[1])).setText(
                         String.join(" ", Arrays.copyOfRange(args, 2, args.length)));
                 break;

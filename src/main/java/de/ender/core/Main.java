@@ -50,11 +50,12 @@ public final class Main extends JavaPlugin {
         getCommand("floattext").setTabCompleter(new TabCompleter()
                 .addCompI(0,"add","remove","set")
                 .addMultiPathedComp(FloatTextManager::getIDList,"remove","set")
-                .addPredicateComp((i)-> i>=2,()->{
+                .addPredicateComp((i)-> i>=3,()->{
                     ArrayList<String> players = new ArrayList<>();
                     Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
-                    return players;
-                })
+                    return players;})
+                .addPathedComp("set","text","turns")
+                .addMultiPathedComp(new String[]{"true","false"},"add.x","set.turns")
 
         );
         //PluginMessageManager
@@ -70,6 +71,8 @@ public final class Main extends JavaPlugin {
         PluginMessageManager.serversInit();
 
         registerGlow();
+
+        FloatTextManager.init();
     }
 
     @Override

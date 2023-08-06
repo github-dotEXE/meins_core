@@ -12,7 +12,7 @@ public class FloatText {
     private final UUID uuid;
     private final NamespacedKey id;
     private TextDisplay entity = null;
-    public FloatText(Location location, String text, String alignment,boolean shadowed,NamespacedKey id){
+    public FloatText(Location location, String text, String alignment,boolean shadowed,boolean turns,NamespacedKey id){
         entity = location.getWorld().spawn(location, TextDisplay.class);
         uuid=entity.getUniqueId();
         entity.setText(text);
@@ -20,7 +20,7 @@ public class FloatText {
         entity.setShadowed(shadowed);
         this.id = id;
     }
-    public FloatText(Location location, String text,NamespacedKey id){
+    public FloatText(Location location, String text,boolean turns,NamespacedKey id){
         entity = location.getWorld().spawn(location, TextDisplay.class);
         uuid=entity.getUniqueId();
         entity.setText(text);

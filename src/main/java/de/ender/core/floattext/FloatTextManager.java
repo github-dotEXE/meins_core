@@ -55,8 +55,8 @@ public class FloatTextManager {
     public static FloatText getByID(NamespacedKey id){
         return floatTextIDs.get(id);
     }
-    public static void addFloatText(Location location, String text, NamespacedKey id){
-        FloatText floatText = new FloatText(location,text,id);
+    public static void addFloatText(Location location, String text,boolean turns, NamespacedKey id){
+        FloatText floatText = new FloatText(location,text,turns,id);
         UUID uuid = floatText.getUuid();
         floatTexts.put(uuid,floatText);
         floatTextIDs.put(id,floatText);

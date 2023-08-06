@@ -6,7 +6,7 @@
 
     <groupId>de.ender</groupId>
     <artifactId>core</artifactId>
-    <version>1.35</version>
+    <version>1.36</version>
     <packaging>jar</packaging>
 
     <name>meins_core</name>
