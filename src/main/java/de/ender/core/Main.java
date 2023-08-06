@@ -14,6 +14,7 @@ import de.ender.core.customItems.CustomItemsCMD;
 import de.ender.core.weapons.WeaponListener;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -50,12 +51,20 @@ public final class Main extends JavaPlugin {
         getCommand("floattext").setTabCompleter(new TabCompleter()
                 .addCompI(0,"add","remove","set")
                 .addMultiPathedComp(FloatTextManager::getIDList,"remove","set")
-                .addPredicateComp((i)-> i>=3,()->{
+                .addPredicateComp((i)-> i>=4,()->{
                     ArrayList<String> players = new ArrayList<>();
                     Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
                     return players;})
-                .addPathedComp("set","text","turns")
-                .addMultiPathedComp(new String[]{"true","false"},"add.x","set.turns")
+                .addPathedComp("set","text","shadowed","billboard")
+                .addMultiPathedComp(new String[]{"True","False"},"add.x","set.shadowed")
+                .addMultiPathedComp(()->{
+                    ArrayList<String> settings = new ArrayList<>();
+                    for (Display.Billboard billboard:
+                        Display.Billboard.values()) {
+                        settings.add(billboard.name());
+                    }
+                    return settings;
+                },"set.billboard", "add.x.x")
 
         );
         //PluginMessageManager

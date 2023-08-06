@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Display;
 import org.bukkit.entity.TextDisplay;
 
 import java.util.UUID;
@@ -12,20 +13,22 @@ public class FloatText {
     private final UUID uuid;
     private final NamespacedKey id;
     private TextDisplay entity = null;
-    public FloatText(Location location, String text, String alignment,boolean shadowed,boolean turns,NamespacedKey id){
+    public FloatText(Location location, String text, String alignment,boolean shadowed,String billboard,NamespacedKey id){
         entity = location.getWorld().spawn(location, TextDisplay.class);
         uuid=entity.getUniqueId();
         entity.setText(text);
         entity.setAlignment(TextDisplay.TextAlignment.valueOf(alignment));
         entity.setShadowed(shadowed);
+        entity.setBillboard(Display.Billboard.valueOf(billboard));
         this.id = id;
     }
-    public FloatText(Location location, String text,boolean turns,NamespacedKey id){
+    public FloatText(Location location, String text,boolean shadowed,String billboard,NamespacedKey id){
         entity = location.getWorld().spawn(location, TextDisplay.class);
         uuid=entity.getUniqueId();
         entity.setText(text);
         entity.setAlignment(TextDisplay.TextAlignment.CENTER);
-        entity.setShadowed(true);
+        entity.setShadowed(shadowed);
+        entity.setBillboard(Display.Billboard.valueOf(billboard));
         this.id = id;
     }
     public FloatText(String uuid,NamespacedKey id){
@@ -38,6 +41,12 @@ public class FloatText {
     }
     public void removeEntity(){
         entity.remove();
+    }
+    public void setShadowed(boolean shadowed){
+        entity.setShadowed(shadowed);
+    }
+    public void setBillboard(String billboard){
+        entity.setBillboard(Display.Billboard.valueOf(billboard));
     }
     public String getText(){
         return entity.getText();
