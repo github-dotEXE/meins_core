@@ -6,6 +6,8 @@ import de.ender.core.customItems.CustomFoodItemListener;
 import de.ender.core.customItems.CustomItem;
 import de.ender.core.customItems.CustomUsableItemListener;
 import de.ender.core.events.PlayerInventoryChangeEventListener;
+import de.ender.core.floattext.FloatTextCMD;
+import de.ender.core.floattext.FloatTextManager;
 import de.ender.core.guiManagers.GuiListener;
 import de.ender.core.modifiers.ModifierManager;
 import de.ender.core.customItems.CustomItemsCMD;
@@ -17,6 +19,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public final class Main extends JavaPlugin {
 
@@ -43,7 +46,17 @@ public final class Main extends JavaPlugin {
         getCommand("afk").setExecutor(new AfkCMD());
         getCommand("customitems").setExecutor(new CustomItemsCMD());
         getCommand("customitems").setTabCompleter(new TabCompleter().addCompI(1, CustomItem::getNames));
+        getCommand("floattext").setExecutor(new FloatTextCMD());
+        getCommand("floattext").setTabCompleter(new TabCompleter()
+                .addCompI(0,"add","remove","set")
+                .addCompI(1, FloatTextManager::getIDList)
+                .addPredicateComp((i)-> i>=2,()->{
+                    ArrayList<String> players = new ArrayList<>();
+                    Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
+                    return players;
+                })
 
+        );
         //PluginMessageManager
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessageManager());

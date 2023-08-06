@@ -12,3 +12,5 @@ commands:
     description: toggles afk
   customitems:
     description: /customitems [name]
+  floattext:
+    description: places a floating text in the world
