@@ -60,7 +60,7 @@ public final class Main extends JavaPlugin {
                     ArrayList<String> players = new ArrayList<>();
                     Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
                     return players;},"set.text.x","set.text.x.x")
-                .addPathedComp("set","text","shadowed","billboard")
+                .addPathedComp("set","text","shadowed","billboard","rotation")
                 .addMultiPathedComp(new String[]{"True","False"},"add.x","set.shadowed.x")
                 .addMultiPathedComp(()->{
                     ArrayList<String> settings = new ArrayList<>();
@@ -71,7 +71,8 @@ public final class Main extends JavaPlugin {
                     return settings;
                 },"set.billboard.x", "add.x.x")
                 .addPathedComp("put", CustomFloatTextManager::getCustomFloatTexts)
-                .addPathedComp("add.x.x.x","0","-90","90")
+                .addMultiPathedComp(new String[]{"0", "-90", "90"},"add.x.x.x","set.rotation.x.x")
+                .addMultiPathedComp(new String[]{"0","-180","180"},"set.rotation.x")
         );
         //PluginMessageManager
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");

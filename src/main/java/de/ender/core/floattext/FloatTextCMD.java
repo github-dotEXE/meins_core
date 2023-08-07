@@ -27,25 +27,27 @@ public class FloatTextCMD implements CommandExecutor {
                         Display.Billboard.valueOf(args[3]),
                         player.getLocation().getYaw(),
                         Float.parseFloat(args[4]),
-                        new NamespacedKey(Main.getPlugin(), args[1]));
+                        NamespacedKey.fromString(args[1]));
                 break;
             case "remove":
-                FloatTextManager.removeFloatText(FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[1])));
+                FloatTextManager.removeFloatText(FloatTextManager.getByID(NamespacedKey.fromString(args[1])));
                 break;
             case "set":
+                FloatText floatText = FloatTextManager.getByID(NamespacedKey.fromString(args[2]));
                 switch (args[1]) {
                     case "text":
-                        FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[2]))
-                                .setText(String.join(" ", Arrays.copyOfRange(args, 3, args.length))
+                        floatText.setText(String.join(" ", Arrays.copyOfRange(args, 3, args.length))
                                         .replace("&", "§").replace("//", "\n"));
                         break;
                     case "billboard":
-                        FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[2]))
-                                .setBillboard(args[3]);
+                        floatText.setBillboard(args[3]);
                         break;
                     case "shadowed":
-                        FloatTextManager.getByID(new NamespacedKey(Main.getPlugin(), args[2]))
-                                .setShadowed(Boolean.parseBoolean(args[3]));
+                        floatText.setShadowed(Boolean.parseBoolean(args[3]));
+                        break;
+                    case "rotation":
+                        if(args.length==3) floatText.getEntity().setRotation(player.getLocation().getYaw(),player.getLocation().getPitch());
+                        else floatText.getEntity().setRotation(Float.parseFloat(args[3]),Float.parseFloat(args[4]));
                         break;
                 }
                 break;
