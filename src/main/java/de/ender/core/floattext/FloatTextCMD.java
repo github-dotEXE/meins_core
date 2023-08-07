@@ -25,8 +25,8 @@ public class FloatTextCMD implements CommandExecutor {
                                 .replace("&", "§").replace("//", "\n"),
                         Boolean.parseBoolean(args[2]),
                         Display.Billboard.valueOf(args[3]),
+                        player.getLocation().getYaw(),
                         Float.parseFloat(args[4]),
-                        player.getLocation().getPitch(),
                         new NamespacedKey(Main.getPlugin(), args[1]));
                 break;
             case "remove":

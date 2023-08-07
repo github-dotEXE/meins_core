@@ -37,9 +37,7 @@ public class FloatText {
     }
     public FloatText(String uuid,NamespacedKey id){
         this.uuid = UUID.fromString(uuid);
-        Bukkit.getWorlds().forEach((world)->{
-            if(world.getEntity(this.uuid)!=null) entity = (TextDisplay) world.getEntity(this.uuid);
-        });
+        entity = (TextDisplay) Bukkit.getServer().getEntity(UUID.fromString(uuid));
         if(entity==null) FloatTextManager.remove(this);
         this.id = id;
     }
