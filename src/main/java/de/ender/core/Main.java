@@ -52,16 +52,16 @@ public final class Main extends JavaPlugin {
         getCommand("floattext").setTabCompleter(new TabCompleter()
                 .addCompI(0,"add","remove","set","put")
                 .addMultiPathedComp(FloatTextManager::getIDList,"remove","set.x")
-                .addPredicateComp((i)-> i>=4,()->{
+                .addPredicateComp((i)-> i>=5,()->{
                     ArrayList<String> players = new ArrayList<>();
                     Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
                     return players;})
-                .addPathedComp("set.text.x",()->{
+                .addMultiPathedComp(()->{
                     ArrayList<String> players = new ArrayList<>();
                     Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
-                    return players;})
+                    return players;},"set.text.x","set.text.x.x")
                 .addPathedComp("set","text","shadowed","billboard")
-                .addMultiPathedComp(new String[]{"True","False"},"add.x","set.shadowed.x")
+                .addMultiPathedComp(new String[]{"True","False"},"add.x","set.shadowed.x","add.x.x.x")
                 .addMultiPathedComp(()->{
                     ArrayList<String> settings = new ArrayList<>();
                     for (Display.Billboard billboard:

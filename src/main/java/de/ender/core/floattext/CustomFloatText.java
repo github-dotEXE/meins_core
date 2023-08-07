@@ -10,16 +10,18 @@ public class CustomFloatText{
     private final Display.Billboard billboard;
     private final boolean shadowed;
     private FloatText floatText = null;
+    private final boolean rotate;
 
-    public CustomFloatText(String text, NamespacedKey id, Display.Billboard billboard, boolean shadowed) {
+    public CustomFloatText(String text, NamespacedKey id, Display.Billboard billboard, boolean shadowed, boolean rotate) {
         this.text = text;
         this.id = id;
         this.billboard = billboard;
         this.shadowed = shadowed;
+        this.rotate = rotate;
     }
     public FloatText spawn(Location location){
         if(isSpawned()) setLocation(location);
-        else floatText = FloatTextManager.addFloatText(location,text,shadowed,billboard.name(),id);
+        else floatText = FloatTextManager.addFloatText(location,text,shadowed,billboard.name(),rotate,id);
         return floatText;
     }
     public FloatText getFloatText(){
