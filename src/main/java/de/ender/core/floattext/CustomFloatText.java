@@ -1,8 +1,12 @@
 package de.ender.core.floattext;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.TextDisplay;
+
+import java.util.UUID;
 
 public class CustomFloatText{
     private final String text;
@@ -20,6 +24,16 @@ public class CustomFloatText{
         this.shadowed = shadowed;
         this.yaw = yaw;
         this.pitch = pitch;
+    }
+    public CustomFloatText(FloatText floatText, NamespacedKey id) {
+        TextDisplay entity = floatText.getEntity();
+        this.text = floatText.getText();
+        this.id = id;
+        this.billboard = entity.getBillboard();
+        this.shadowed = false;
+        this.floatText = floatText;
+        this.yaw = 181;
+        this.pitch = 91;
     }
     public FloatText spawn(Location location){
         if(!(-180<yaw&&yaw<180)) yaw = location.getYaw();
