@@ -13,19 +13,8 @@ import java.util.UUID;
 public class FloatText {
     private final UUID uuid;
     private final NamespacedKey id;
-    private TextDisplay entity = null;
-    public FloatText(Location location, String text,boolean shadowed,String billboard,boolean rotate,NamespacedKey id){
-        entity = location.getWorld().spawn(location, TextDisplay.class);
-        uuid=entity.getUniqueId();
-        entity.setText(text);
-        entity.setAlignment(TextDisplay.TextAlignment.CENTER);
-        entity.setShadowed(shadowed);
-        entity.setBillboard(Display.Billboard.valueOf(billboard));
-        entity.setRotation(location.getYaw(),location.getPitch());
-        if(rotate) entity.setRotation(location.getYaw(),location.getPitch());
-        this.id = id;
-    }
-    public FloatText(Location location, String text, boolean shadowed, Display.Billboard billboard,float yaw,float pitch, NamespacedKey id){
+    private TextDisplay entity;
+    public FloatText(Location location, String text, boolean shadowed, Display.Billboard billboard,float yaw,float pitch,boolean seethrough, NamespacedKey id){
         entity = location.getWorld().spawn(location, TextDisplay.class);
         uuid=entity.getUniqueId();
         entity.setText(text);
@@ -33,6 +22,7 @@ public class FloatText {
         entity.setShadowed(shadowed);
         entity.setBillboard(billboard);
         entity.setRotation(yaw,pitch);
+        entity.setSeeThrough(seethrough);
         this.id = id;
     }
     public FloatText(String uuid,NamespacedKey id){

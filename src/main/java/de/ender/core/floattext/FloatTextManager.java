@@ -56,9 +56,9 @@ public class FloatTextManager {
     public static FloatText getByID(NamespacedKey id){
         return floatTextIDs.get(id);
     }
-    public static FloatText addFloatText(Location location, String text, boolean shadowed, Display.Billboard billboard, float yaw, float pitch, NamespacedKey id){
+    public static FloatText addFloatText(Location location, String text, boolean shadowed, Display.Billboard billboard, float yaw, float pitch,boolean seethrough, NamespacedKey id){
         if(getByID(id)!=null) removeFloatText(getByID(id));
-        FloatText floatText = new FloatText(location,text,shadowed,billboard,yaw,pitch,id);
+        FloatText floatText = new FloatText(location,text,shadowed,billboard,yaw,pitch,seethrough,id);
         UUID uuid = floatText.getUuid();
         floatTexts.put(uuid,floatText);
         floatTextIDs.put(id,floatText);
