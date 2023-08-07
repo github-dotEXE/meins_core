@@ -25,14 +25,14 @@ public class FloatText {
         if(rotate) entity.setRotation(location.getYaw(),location.getPitch());
         this.id = id;
     }
-    public FloatText(Location location, String text, boolean shadowed, Display.Billboard billboard,boolean rotate, NamespacedKey id){
+    public FloatText(Location location, String text, boolean shadowed, Display.Billboard billboard,float yaw,float pitch, NamespacedKey id){
         entity = location.getWorld().spawn(location, TextDisplay.class);
         uuid=entity.getUniqueId();
         entity.setText(text);
         entity.setAlignment(TextDisplay.TextAlignment.CENTER);
         entity.setShadowed(shadowed);
         entity.setBillboard(billboard);
-        if(rotate) entity.setRotation(location.getYaw(),location.getPitch());
+        entity.setRotation(yaw,pitch);
         this.id = id;
     }
     public FloatText(String uuid,NamespacedKey id){

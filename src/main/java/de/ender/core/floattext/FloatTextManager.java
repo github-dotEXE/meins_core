@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Display;
 import org.bukkit.entity.TextDisplay;
 
 import java.util.ArrayList;
@@ -55,9 +56,9 @@ public class FloatTextManager {
     public static FloatText getByID(NamespacedKey id){
         return floatTextIDs.get(id);
     }
-    public static FloatText addFloatText(Location location, String text,boolean shadowed,String billboard,boolean rotate, NamespacedKey id){
+    public static FloatText addFloatText(Location location, String text, boolean shadowed, Display.Billboard billboard, float yaw, float pitch, NamespacedKey id){
         if(getByID(id)!=null) removeFloatText(getByID(id));
-        FloatText floatText = new FloatText(location,text,shadowed,billboard,rotate,id);
+        FloatText floatText = new FloatText(location,text,shadowed,billboard,yaw,pitch,id);
         UUID uuid = floatText.getUuid();
         floatTexts.put(uuid,floatText);
         floatTextIDs.put(id,floatText);

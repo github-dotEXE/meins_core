@@ -5,6 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Display;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -23,8 +24,9 @@ public class FloatTextCMD implements CommandExecutor {
                         String.join(" ", Arrays.copyOfRange(args, 5, args.length))
                                 .replace("&", "§").replace("//", "\n"),
                         Boolean.parseBoolean(args[2]),
-                        args[3],
-                        Boolean.parseBoolean(args[4]),
+                        Display.Billboard.valueOf(args[3]),
+                        Float.parseFloat(args[4]),
+                        player.getLocation().getPitch(),
                         new NamespacedKey(Main.getPlugin(), args[1]));
                 break;
             case "remove":
