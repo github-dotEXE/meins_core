@@ -1,13 +1,11 @@
 package de.ender.core.floattext;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import de.ender.core.Main;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +27,7 @@ public class FloatTextCMD implements CommandExecutor {
                         player.getLocation().getYaw(),
                         Float.parseFloat(args[4]),
                         Boolean.parseBoolean(args[5]),
-                        NamespacedKey.fromString(args[1]));
+                        new NamespacedKey(Main.getPlugin(),args[1]));
                 break;
             case "remove":
                 FloatTextManager.removeFloatText(FloatTextManager.getByID(NamespacedKey.fromString(args[1])));

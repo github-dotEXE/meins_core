@@ -2,12 +2,10 @@ package de.ender.core.floattext;
 
 import de.ender.core.CConfig;
 import de.ender.core.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.TextDisplay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,9 +43,7 @@ public class FloatTextManager {
     }
     public static ArrayList<String> getIDList(){
         ArrayList<String> ids = new ArrayList<>();
-        floatTextIDs.keySet().forEach((id)-> {
-            ids.add(id.asString());
-        });
+        floatTextIDs.keySet().forEach((id)-> ids.add(id.asString()));
         return ids;
     }
     public static FloatText getByUUID(UUID uuid){

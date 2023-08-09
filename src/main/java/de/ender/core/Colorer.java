@@ -2,6 +2,7 @@ package de.ender.core;
 
 import java.util.Arrays;
 
+@Deprecated
 public class Colorer {
     public static String string(String str,String index){
         return String.join(" ", str.replace(index, "§"));

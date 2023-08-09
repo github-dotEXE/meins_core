@@ -60,8 +60,8 @@ public final class Main extends JavaPlugin {
                     ArrayList<String> players = new ArrayList<>();
                     Bukkit.getOnlinePlayers().forEach((player)-> players.add(player.getName()));
                     return players;},"set.text.x","set.text.x.x","set.text.x.x.x")
-                .addPathedComp("set","text","shadowed","billboard","rotation")
-                .addMultiPathedComp(new String[]{"True","False"},"add.x","set.shadowed.x","set.seethrough.x")
+                .addPathedComp("set","text","shadowed","billboard","rotation","seethrough")
+                .addMultiPathedComp(new String[]{"True","False"},"add.x","set.shadowed.x","set.seethrough.x","add.x.x.x.x")
                 .addMultiPathedComp(()->{
                     ArrayList<String> settings = new ArrayList<>();
                     for (Display.Billboard billboard:
@@ -117,7 +117,7 @@ public final class Main extends JavaPlugin {
             Glow glow = new Glow();
             Enchantment.registerEnchantment(glow);
         }
-        catch (IllegalArgumentException e){
+        catch (IllegalArgumentException ignored){
         }
         catch(Exception e){
             e.printStackTrace();
