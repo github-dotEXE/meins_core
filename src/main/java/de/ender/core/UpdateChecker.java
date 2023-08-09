@@ -70,14 +70,14 @@ public class UpdateChecker {
                     ReadableByteChannel rbc = Channels.newChannel(website.openStream());
                     FileOutputStream fos = new FileOutputStream(newfile);
                     fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-                    Log.success("Successfully downloaded latest file from: <light_gray>"+ formattedURL);
+                    Log.success("Successfully downloaded latest file from: <gray>"+ formattedURL);
                     try{
                         Files.delete(oldfile.toPath());
                     }catch (NoSuchFileException exception){
-                        Log.error("Unable to delete old jar of: <light_gray>"+ name);
+                        Log.error("Unable to delete old jar of: <gray>"+ name);
                     }
                 } catch (IOException e) {
-                    Log.error("Unable to download latest file from: <light_gray>"+ formattedURL);
+                    Log.error("Unable to download latest file from: <gray>"+ formattedURL);
                 }
             }
         }.runTaskAsynchronously(Main.getPlugin());
@@ -94,7 +94,7 @@ public class UpdateChecker {
     }
 
     private void getLatest() {
-        Log.info("Checking for Plugin updates for: <light_gray>"+repoName);
+        Log.info("Checking for Plugin updates for: <gray>"+repoName);
         String url ="https://raw.githubusercontent.com/"+githubProfileName+"/"+repoName+"/"+branchName+"/pom.xml";
         try {
             InputStream pomStream = new URL(url).openStream();
@@ -108,8 +108,8 @@ public class UpdateChecker {
             }
             scanner.close();
         } catch (IOException e) {
-            Log.warn("No pom.xml found in: <light_gray>"+url);
-            Log.error("Unable to check for updates for repo: <light_gray>" + repoName);
+            Log.warn("No pom.xml found in: <gray>"+url);
+            Log.error("Unable to check for updates for repo: <gray>" + repoName);
         }
     }
 
@@ -127,7 +127,7 @@ public class UpdateChecker {
             upToDate = version.equals(latest + "0");
             if(upToDate) latest += "0";
         }
-        if (upToDate) Log.info("Plugin " + repoName + " is up to date! <light_gray>" + "Version: " + latest);
+        if (upToDate) Log.info("Plugin " + repoName + " is up to date! <gray>" + "Version: " + latest);
         else Log.warn(repoName + " is out of date! Please update. You are still on Version " + version + ", newest is " + latest + "!");
         return this;
     }
