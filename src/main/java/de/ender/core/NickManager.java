@@ -17,11 +17,7 @@ public class NickManager {
     public static void changeSkin(Player player, String skinsPlayersName) {
         com.destroystokyo.paper.profile.PlayerProfile profile = player.getPlayerProfile();
         try {
-            //URL url_0 = new URL("https://api.mojang.com/users/profiles/minecraft/" + skinsPlayersName);
 
-            //InputStreamReader reader_0 = new InputStreamReader(url_0.openStream());
-
-            //String uuid = JsonParser.parseReader(reader_0).getAsJsonObject().get("id").getAsString();
             UUID uuid = Bukkit.getOfflinePlayer(skinsPlayersName).getUniqueId();
 
             URL url_1 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");

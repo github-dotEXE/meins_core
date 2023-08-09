@@ -89,13 +89,12 @@ public class AfkManager implements Listener {
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
-    private static boolean stopCurrentTask(Player player){
+    private static void stopCurrentTask(Player player){
         BukkitTask task = currentTask.get(player);
         if(task != null){
             task.cancel();
             currentTask.put(player,null);
         }
-        return task != null;
     }
 
     @EventHandler

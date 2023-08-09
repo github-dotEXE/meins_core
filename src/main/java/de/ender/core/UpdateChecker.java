@@ -1,6 +1,5 @@
 package de.ender.core;
 
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -59,11 +58,11 @@ public class UpdateChecker {
                 File newfile = new File(Main.getPlugin().getDataFolder().getParentFile(),fileName);
                 try {
                     if (Float.parseFloat(version) > Float.parseFloat(latest)) {
-                        Log.log(ChatColor.GOLD+"Repo "+repoName+" isn't up to date!");
+                        Log.warn("Repo "+repoName+" isn't up to date!");
                         return;
                     } else if(Float.parseFloat(version) == Float.parseFloat(latest)) return;
                 } catch (NumberFormatException e) {
-                    Log.log("Couldn't insure that repo isn't up to date!");
+                    Log.warn("Couldn't insure that repo isn't up to date!");
                 }
 
                 try {
@@ -71,14 +70,14 @@ public class UpdateChecker {
                     ReadableByteChannel rbc = Channels.newChannel(website.openStream());
                     FileOutputStream fos = new FileOutputStream(newfile);
                     fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-                    Log.log(ChatColor.GREEN+"Successfully downloaded latest file from: "+ChatColor.WHITE + formattedURL);
+                    Log.success("Successfully downloaded latest file from: <light_gray>"+ formattedURL);
                     try{
                         Files.delete(oldfile.toPath());
                     }catch (NoSuchFileException exception){
-                        Log.log(ChatColor.RED + "Unable to delete old jar of: "+ChatColor.WHITE + name);
+                        Log.error("Unable to delete old jar of: <light_gray>"+ name);
                     }
                 } catch (IOException e) {
-                    Log.log(ChatColor.RED + "Unable to download latest file from: "+ChatColor.WHITE + formattedURL);
+                    Log.error("Unable to download latest file from: <light_gray>"+ formattedURL);
                 }
             }
         }.runTaskAsynchronously(Main.getPlugin());
@@ -95,7 +94,7 @@ public class UpdateChecker {
     }
 
     private void getLatest() {
-        Log.log(ChatColor.GRAY + "Checking for Plugin updates for "+repoName+"...");
+        Log.info("Checking for Plugin updates for: <light_gray>"+repoName);
         String url ="https://raw.githubusercontent.com/"+githubProfileName+"/"+repoName+"/"+branchName+"/pom.xml";
         try {
             InputStream pomStream = new URL(url).openStream();
@@ -109,8 +108,8 @@ public class UpdateChecker {
             }
             scanner.close();
         } catch (IOException e) {
-            Log.log(ChatColor.YELLOW + "No pom.xml found in "+url);
-            Log.log(ChatColor.RED + "Unable to check for updates for repo " + repoName);
+            Log.warn("No pom.xml found in: <light_gray>"+url);
+            Log.error("Unable to check for updates for repo: <light_gray>" + repoName);
         }
     }
 
@@ -128,8 +127,8 @@ public class UpdateChecker {
             upToDate = version.equals(latest + "0");
             if(upToDate) latest += "0";
         }
-        if (upToDate) Log.log(ChatColor.GREEN + "Plugin " + repoName + " is up to date! " + ChatColor.GRAY + "Version: " + latest);
-        else Log.log(ChatColor.GOLD + repoName + " is out of date! Please update. You are still on Version " + version + ", newest is " + latest + "!");
+        if (upToDate) Log.info("Plugin " + repoName + " is up to date! <light_gray>" + "Version: " + latest);
+        else Log.warn(repoName + " is out of date! Please update. You are still on Version " + version + ", newest is " + latest + "!");
         return this;
     }
 }

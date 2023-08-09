@@ -79,7 +79,7 @@ public abstract class CustomItem {
     }
 
     public ItemStack getItem(){
-        return new ItemBuilder(getItemStack()).addLore(ChatColor.DARK_GRAY+"ItemID: "+getUUID().toString()).build().asOne();
+        return new ItemBuilder(getItemStack()).addLore("<dark_gray>ItemID: "+getUUID().toString()).build().asOne();
     }
     protected abstract ItemStack getItemStack();
 

@@ -3,7 +3,7 @@ package de.ender.core.weapons;
 import de.ender.core.Main;
 import de.ender.core.customItems.CustomItem;
 import de.ender.core.customItems.CustomUseableItem;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
@@ -32,6 +32,7 @@ public abstract class Weapon extends CustomUseableItem {
     private final Sound fireingSound;
     private final float fireingSoundVolume;
     private final float fireingSoundPitch;
+    private static final MiniMessage minimessage = MiniMessage.miniMessage();
 
     public Weapon(String name,JavaPlugin plugin,float reloadTime,double damage,
                   boolean zoomable,boolean requireZoom,boolean reloadOnZoom,
@@ -155,23 +156,23 @@ public abstract class Weapon extends CustomUseableItem {
 
     protected void missingRequirements(Player player){
         player.playSound(player, Sound.ENTITY_VILLAGER_NO,1,1);
-        player.sendActionBar(ChatColor.RED+"You don't fulfill the requirements to use this weapon!");
+        player.sendActionBar(minimessage.deserialize("<red>You don't fulfill the requirements to use this weapon!"));
     }
     protected void error(Player player){
         player.playSound(player,Sound.BLOCK_DECORATED_POT_BREAK,1,1);
-        player.sendActionBar(ChatColor.RED+"Something went wrong whilst using your weapon!");
+        player.sendActionBar(minimessage.deserialize("<red>Something went wrong whilst using your weapon!"));
     }
     protected void onCooldown(Player player){
         player.playSound(player,Sound.ENTITY_ENDERMAN_TELEPORT,1,1);
-        player.sendActionBar(ChatColor.RED+"Your weapon is on cooldown!");
+        player.sendActionBar(minimessage.deserialize("<red>Your weapon is on cooldown!"));
     }
     protected void noAmmo(Player player){
         player.playSound(player,Sound.UI_BUTTON_CLICK,1,1); // test pitch and volume
-        player.sendActionBar(ChatColor.GOLD+"You don't have enough ammo to use this weapon!");
+        player.sendActionBar(minimessage.deserialize("<gold>You don't have enough ammo to use this weapon!"));
     }
     protected void notZoomed(Player player){
         player.playSound(player, Sound.BLOCK_COMPARATOR_CLICK, 1.0F, 0.3F);
-        player.sendActionBar(ChatColor.GOLD + "You have to be zoomed to shoot!");
+        player.sendActionBar(minimessage.deserialize("<gold>You have to be zoomed to shoot!"));
     }
 
     @Override

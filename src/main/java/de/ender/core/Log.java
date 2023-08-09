@@ -1,31 +1,50 @@
 package de.ender.core;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import static org.bukkit.Bukkit.getServer;
 
 public class Log {
+    private static final ConsoleCommandSender console = getServer().getConsoleSender();
+    private static final MiniMessage miniMessage = MiniMessage.miniMessage();
+
     public static void info(String message){
-        getServer().getConsoleSender().sendMessage("[INFO]: "+ChatColor.WHITE+message);
+        log("<white>[INFO]: <reset>"+message);
     }
     public static void warn(String message){
-        getServer().getConsoleSender().sendMessage("[WARN]: "+ChatColor.GOLD+message);
+        log("<yellow>[WARN]: <reset>"+message);
     }
     public static void error(String message){
-        getServer().getConsoleSender().sendMessage("[ERROR]: "+ChatColor.RED+message);
+        log("<red>[ERROR]: <reset>"+message);
     }
     public static void criticalError(String message){
-        getServer().getConsoleSender().sendMessage("[CRITICAL ERROR]: "+ChatColor.DARK_RED+message);
+        log("<dark_red>[CRITICAL ERROR]: <reset>"+message);
     }
     public static void success(String message){
-        getServer().getConsoleSender().sendRawMessage("[SUCCESS]: "+ChatColor.GREEN+message);
+        log("[SUCCESS]: <reset>"+message);
     }
     public static void printLogo(){
-        Log.log(ChatColor.AQUA + "Presented by:\n███╗░░░███╗███████╗██╗███╗░░██╗░██████╗™\n████╗░████║██╔════╝██║████╗░██║██╔════╝\n██╔████╔██║█████╗░░██║██╔██╗██║╚█████╗░\n██║╚██╔╝██║██╔══╝░░██║██║╚████║░╚═══██╗\n██║░╚═╝░██║███████╗██║██║░╚███║██████╔╝\n╚═╝░░░░░╚═╝╚══════╝╚═╝╚═╝░░╚══╝╚═════╝░");
+        info("<aqua>"+
+                "Presented by:"+ lf()+
+                "███╗░░░███╗███████╗██╗███╗░░██╗░██████╗™"+ lf() +
+                "████╗░████║██╔════╝██║████╗░██║██╔════╝"+ lf() +
+                "██╔████╔██║█████╗░░██║██╔██╗██║╚█████╗░"+ lf() +
+                "██║╚██╔╝██║██╔══╝░░██║██║╚████║░╚═══██╗"+ lf() +
+                "██║░╚═╝░██║███████╗██║██║░╚███║██████╔╝"+ lf() +
+                "╚═╝░░░░░╚═╝╚══════╝╚═╝╚═╝░░╚══╝╚═════╝░");
     }
+    private static String lf(){
+        return "\n";
+    }
+
     public static void log(String message){
-        getServer().getConsoleSender().sendRawMessage(message);
+        console.sendMessage(miniMessage.deserialize(message));
+    }
+    public static void log(Component message){
+        console.sendMessage(message);
     }
     public static void enable(JavaPlugin plugin){
         info("Enabling "+plugin.getName()+"...");

@@ -1,7 +1,5 @@
 package de.ender.core;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.StringUtil;
@@ -11,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 public class TabCompleter implements org.bukkit.command.TabCompleter {
     private final HashMap<Integer,List<String>> checksI = new HashMap<>();

@@ -5,7 +5,6 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -292,16 +291,16 @@ public class PluginMessageManager implements PluginMessageListener, Listener {
     }
 
     private static boolean checkIP(String ip, int port) {
-        Log.log(ChatColor.YELLOW + "Pinging " + ip + ":" + port);
+        Log.info("<light_gray>Pinging " + ip + ":" + port);
         boolean reachable =false;
         try {
             Socket s = new Socket();
             s.connect(new InetSocketAddress(ip, port), 20);
             s.close();
-            Log.log(ChatColor.GREEN + ip + ":" + port + " is reachable");
+            Log.success(ip + ":" + port + " is reachable");
             reachable = true;
         } catch (IOException e) {
-            Log.log(ChatColor.RED + ip + ":" + port + " is offline");
+            Log.error(ip + ":" + port + " is offline");
         }
         return reachable;
     }

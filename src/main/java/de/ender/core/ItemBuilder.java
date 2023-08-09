@@ -1,18 +1,20 @@
 package de.ender.core;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ItemBuilder {
 
-    private ItemStack item;
-    private ItemMeta itemMeta;
+    private final ItemStack item;
+    private final ItemMeta itemMeta;
+    private static final MiniMessage minimessage = MiniMessage.miniMessage();
 
 
     public ItemBuilder(Material material, int amount) {
@@ -24,9 +26,8 @@ public class ItemBuilder {
         itemMeta = item.getItemMeta();
     }
 
-    @Deprecated
     public ItemBuilder setName(String name) {
-        itemMeta.setDisplayName(name);
+        itemMeta.displayName(minimessage.deserialize(name));
         return this;
     }
     public ItemBuilder setAmount(int amount) {
@@ -34,34 +35,26 @@ public class ItemBuilder {
         return this;
     }
 
-    @Deprecated
-    public ItemBuilder setLore(String[] lore) {
-        itemMeta.setLore(Arrays.asList(lore));
+    public ItemBuilder setLore(String[] loresS) {
+        ArrayList<Component> loresC = new ArrayList<>();
+        for (String lore: loresS) loresC.add(minimessage.deserialize(lore));
+        itemMeta.lore(loresC);
         return this;
     }
 
-    @Deprecated
     public ItemBuilder addLore(String lore) {
-        List<String> lorebefore = itemMeta.getLore();
-
-        List<String> newLore;
-        if(lorebefore != null) newLore = new ArrayList<>(lorebefore);
-        else newLore = new ArrayList<>();
-
-        newLore.add(lore);
-        itemMeta.setLore(newLore);
+        List<Component> lores = new ArrayList<>();
+        if(itemMeta.hasLore()) lores = itemMeta.lore();
+        lores.add(minimessage.deserialize(lore));
+        itemMeta.lore(lores);
         return this;
     }
-    @Deprecated
+
     public ItemBuilder setLoreAt(int index, String lore) {
-        List<String> lorebefore = itemMeta.getLore();
-
-        List<String> newLore;
-        if(lorebefore != null) newLore = new ArrayList<>(lorebefore);
-        else newLore = new ArrayList<>();
-
-        newLore.add(index,lore);
-        itemMeta.setLore(newLore);
+        List<Component> lores = new ArrayList<>();
+        if(itemMeta.hasLore()) lores = itemMeta.lore();
+        lores.add(index,minimessage.deserialize(lore));
+        itemMeta.lore(lores);
         return this;
     }
 
