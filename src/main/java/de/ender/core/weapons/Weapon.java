@@ -53,6 +53,7 @@ public abstract class Weapon extends CustomUseableItem {
     }
     private boolean hasAmmo(Player player) {
         ItemStack item = getAmmoItem();
+        if(item == null) return true;
         return player.getInventory().containsAtLeast(item,item.getAmount());
     }
     private boolean checkRequirements(Player player){

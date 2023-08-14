@@ -47,7 +47,7 @@ public final class Main extends JavaPlugin {
 
         getCommand("afk").setExecutor(new AfkCMD());
         getCommand("customitems").setExecutor(new CustomItemsCMD());
-        getCommand("customitems").setTabCompleter(new TabCompleter().addCompI(1, CustomItem::getNames));
+        getCommand("customitems").setTabCompleter(new TabCompleter().addCompI(0, CustomItem::getNames));
         getCommand("floattext").setExecutor(new FloatTextCMD());
         getCommand("floattext").setTabCompleter(new TabCompleter()
                 .addCompI(0,"add","remove","set","put")

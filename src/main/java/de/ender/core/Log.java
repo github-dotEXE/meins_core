@@ -24,7 +24,7 @@ public class Log {
         log("<dark_red>[CRITICAL ERROR]: <reset>"+message);
     }
     public static void success(String message){
-        log("[SUCCESS]: <reset>"+message);
+        log("<dark_green>[SUCCESS]: <reset>"+message);
     }
     public static void printLogo(){
         info("<aqua>"+
@@ -47,9 +47,9 @@ public class Log {
         console.sendMessage(message);
     }
     public static void enable(JavaPlugin plugin){
-        info("Enabling "+plugin.getName()+"...");
+        info("<green>Enabling <reset>"+plugin.getName());
     }
     public static void disable(JavaPlugin plugin){
-        info("Disabling "+plugin.getName()+"...");
+        info("<red>Disabling <reset>"+plugin.getName());
     }
 }
