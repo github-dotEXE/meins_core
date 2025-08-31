@@ -16,7 +16,7 @@ import java.util.Scanner;
 
 public class UpdateChecker {
 
-    private boolean upToDate;
+    private boolean upToDate = false;
     private String latest;
     private final String version;
     private final String githubProfileName;
@@ -24,7 +24,6 @@ public class UpdateChecker {
     private final String branchName;
 
     public UpdateChecker(JavaPlugin plugin,String github_profile_name, String repo_name, String branch_name){
-        this.upToDate = false;
         this.githubProfileName = github_profile_name;
         this.repoName = repo_name;
         this.branchName = branch_name;
@@ -35,11 +34,18 @@ public class UpdateChecker {
     public UpdateChecker(JavaPlugin meins_plugin,String branchName){
         this.githubProfileName = "github-dotEXE";
         this.branchName = branchName;
-        this.upToDate = false;
         this.repoName = meins_plugin.getPluginMeta().getName();
 
         this.version = meins_plugin.getPluginMeta().getVersion();
         getLatest();
+    }
+    public UpdateChecker(String name,String latest){
+        this.githubProfileName = "github-dotEXE";
+        this.branchName = "";
+        this.repoName = name;
+        this.latest = latest;
+
+        this.version = "";
     }
 
     /**
@@ -71,11 +77,7 @@ public class UpdateChecker {
                     FileOutputStream fos = new FileOutputStream(newfile);
                     fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
                     Log.success("Successfully downloaded latest file from: <gray>"+ formattedURL);
-                    try{
-                        Files.delete(oldfile.toPath());
-                    }catch (NoSuchFileException exception){
-                        Log.error("Unable to delete old jar of: <gray>"+ name);
-                    }
+                    oldfile.deleteOnExit();
                 } catch (IOException e) {
                     Log.error("Unable to download latest file from: <gray>"+ formattedURL);
                 }

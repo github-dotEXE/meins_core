@@ -25,8 +25,8 @@ public class FloatTextManager {
         cConfig.save();
     }
     public static void removeFloatText(FloatText floatText){
-        floatText.removeEntity();
         remove(floatText);
+        floatText.removeEntity();
     }
     public static void init(){
         CConfig cConfig = new CConfig("floattext", Main.getPlugin());

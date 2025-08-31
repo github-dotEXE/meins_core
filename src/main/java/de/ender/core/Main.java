@@ -4,17 +4,19 @@ import de.ender.core.afk.AfkCMD;
 import de.ender.core.afk.AfkManager;
 import de.ender.core.customItems.CustomFoodItemListener;
 import de.ender.core.customItems.CustomItem;
+import de.ender.core.customItems.CustomItemsCMD;
 import de.ender.core.customItems.CustomUsableItemListener;
 import de.ender.core.events.PlayerInventoryChangeEventListener;
 import de.ender.core.floattext.CustomFloatTextManager;
 import de.ender.core.floattext.FloatTextCMD;
 import de.ender.core.floattext.FloatTextManager;
 import de.ender.core.guiManagers.GuiListener;
+import de.ender.core.guiManagers.itemButton.ItemButtonListener;
 import de.ender.core.modifiers.ModifierManager;
-import de.ender.core.customItems.CustomItemsCMD;
 import de.ender.core.weapons.WeaponListener;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -44,8 +46,10 @@ public final class Main extends JavaPlugin {
         pluginManager.registerEvents(new CustomUsableItemListener(), this);
         pluginManager.registerEvents(new CustomFoodItemListener(), this);
         pluginManager.registerEvents(new PlayerInventoryChangeEventListener(), this);
+        pluginManager.registerEvents(new ItemButtonListener(), this);
 
         getCommand("afk").setExecutor(new AfkCMD());
+        getCommand("update").setExecutor(new UpdateCMD());
         getCommand("customitems").setExecutor(new CustomItemsCMD());
         getCommand("customitems").setTabCompleter(new TabCompleter().addCompI(0, CustomItem::getNames));
         getCommand("floattext").setExecutor(new FloatTextCMD());
@@ -86,8 +90,6 @@ public final class Main extends JavaPlugin {
         //try to auto re-initialize serverList
         PluginMessageManager.serversInit();
 
-        registerGlow();
-
         FloatTextManager.init();
     }
 
@@ -103,24 +105,5 @@ public final class Main extends JavaPlugin {
     }
     public static Main getPlugin() {
         return plugin;
-    }
-    public void registerGlow() {
-        try {
-            Field f = Enchantment.class.getDeclaredField("acceptingNew");
-            f.setAccessible(true);
-            f.set(null, true);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Glow glow = new Glow();
-            Enchantment.registerEnchantment(glow);
-        }
-        catch (IllegalArgumentException ignored){
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
     }
 }

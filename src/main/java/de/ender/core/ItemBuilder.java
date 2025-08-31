@@ -30,6 +30,10 @@ public class ItemBuilder {
         itemMeta.displayName(minimessage.deserialize(name));
         return this;
     }
+    public ItemBuilder setName(Component name) {
+        itemMeta.displayName(name);
+        return this;
+    }
     public ItemBuilder setAmount(int amount) {
         item.setAmount(amount);
         return this;
@@ -66,18 +70,15 @@ public class ItemBuilder {
         item.addEnchantment(enchantment, enchantment.getMaxLevel());
         return this;
     }
-    public ItemBuilder addEnchantmentGlint(){
-        ItemMeta itemMeta = item.getItemMeta();
-        Glow glow = new Glow();
-        itemMeta.addEnchant(glow, 1, true);
-        item.setItemMeta(itemMeta);
-        return this;
-    }
 
     public ItemStack build() {
         item.setItemMeta(itemMeta);
         return item;
     }
 
+    public ItemBuilder setMaterial(Material material) {
+        item.setType(material);
+        return this;
+    }
 }
 

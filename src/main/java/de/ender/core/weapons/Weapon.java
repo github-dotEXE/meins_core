@@ -51,7 +51,7 @@ public abstract class Weapon extends CustomUseableItem {
     private boolean isOnCooldown(Player player){
         return !((System.currentTimeMillis()-lastFired.getOrDefault(player, 0L))>=reloadTime*1000);
     }
-    private boolean hasAmmo(Player player) {
+    protected boolean hasAmmo(Player player) {
         ItemStack item = getAmmoItem();
         if(item == null) return true;
         return player.getInventory().containsAtLeast(item,item.getAmount());
@@ -75,8 +75,12 @@ public abstract class Weapon extends CustomUseableItem {
             useEffects(player,useType);
             player.playSound(player,fireingSound,fireingSoundVolume,fireingSoundPitch);
             lastFired.put(player,System.currentTimeMillis());
-            removeItem(player,getAmmoItem());
+            removeAmmo(player);
         }
+    }
+
+    protected void removeAmmo(Player player) {
+        removeItem(player,getAmmoItem());
     }
 
     protected boolean isZoomed(Player player){

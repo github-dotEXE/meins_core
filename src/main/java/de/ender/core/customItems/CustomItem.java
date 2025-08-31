@@ -58,6 +58,7 @@ public abstract class CustomItem {
         return new ArrayList<>(names.keySet());
     }
     protected void removeItem(Player player,ItemStack item){
+        if(item == null)return;
         for (ItemStack items: player.getInventory()) {
             if(items!=null&&items.asOne().equals(item.asOne())){
                 items.setAmount(items.getAmount()-item.getAmount());
@@ -72,14 +73,14 @@ public abstract class CustomItem {
         getCustomItem(getUUID());
         Recipe recipe = getRecipe();
         try{
-            if(!Bukkit.addRecipe(recipe)) Log.warn("Recipe couldn't be added");
+            Bukkit.addRecipe(recipe);
         } catch(NullPointerException e) {
-            Log.info("Custom item "+getName()+" has no recipe!");
+            Log.warn("Recipe for "+getName()+" couldn't be added!");
         }
     }
 
     public ItemStack getItem(){
-        return new ItemBuilder(getItemStack()).addLore("<dark_gray>ItemID: "+getUUID().toString()).build().asOne();
+        return new ItemBuilder(getItemStack()).setLoreAt(0,"<dark_gray>ItemID: "+getUUID().toString()).build().asOne();
     }
     protected abstract ItemStack getItemStack();
 

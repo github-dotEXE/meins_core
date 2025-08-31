@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.HashMap;
 
 public class AfkManager implements Listener {
-    private static final long TIME_FOR_AFK =60*1000;
+    private static final long TIME_FOR_AFK = (long) (5*60*1000);
     private static final HashMap<Player,Long> lastMovement = new HashMap<>();
     private static final HashMap<Player,BukkitTask> currentTask = new HashMap<>();
 
